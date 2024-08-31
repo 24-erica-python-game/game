@@ -1,7 +1,7 @@
-Set-Location .\Scripts
+Set-Location .\scripts
 
-python3 .\set_venv.py
+python .\set_venv.py
 
-..\venv\bin\Activate.ps1
+..\venv\Scripts\Activate.ps1
 
-python3 .\resolve_requirements.py
+python .\resolve_requirements.py

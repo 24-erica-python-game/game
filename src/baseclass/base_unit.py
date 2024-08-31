@@ -23,8 +23,8 @@ class UnitMeta(ABCMeta):
         return self.position
 
     @property
-    def supply(self) -> int:
-        return self.supply
+    def supply_reserve(self) -> int:
+        return self.supply_reserve
     
 
     @abstractmethod
@@ -34,3 +34,12 @@ class UnitMeta(ABCMeta):
     def move(self, destination: Position) -> bool:
         # TODO: 이동 로직 구현
         pass
+
+
+class SupplyUnitMeta(UnitMeta):
+    def __init__(self, position: Position):
+        pass
+
+    def supply(self, target_unit: UnitMeta):
+        target_unit.supply_reserve += 100
+        
