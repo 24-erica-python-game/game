@@ -2,6 +2,7 @@ from abc import ABCMeta, abstractmethod
 from typing import NamedTuple, Union, Optional
 from base_unit import UnitMeta
 
+
 class Position(NamedTuple):
     q: int
     r: int
@@ -9,6 +10,11 @@ class Position(NamedTuple):
 
 
 class TileMeta(ABCMeta):
+    def __init__(self, q: int, r: int, s: int) -> None:
+        self.q = q
+        self.r = r
+        self.s = s
+
     @property
     def q(self) -> int:
         return self.q

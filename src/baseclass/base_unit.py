@@ -1,7 +1,8 @@
 from abc import ABCMeta, abstractmethod
 from os import PathLike
 from enum import IntEnum
-from base_tile import Position
+from base_tile import Position, TileMeta
+from dataclasses import dataclass
 
 class AnimationState(IntEnum):
     IDLE = 0
@@ -34,6 +35,24 @@ class UnitMeta(ABCMeta):
     def move(self, destination: Position) -> bool:
         # TODO: 이동 로직 구현
         pass
+
+    def find_path(self, destination: Position) -> list:
+        """
+        A* 알고리즘으로 구현
+        """
+        @dataclass
+        class Node:
+            node_position: Position
+            parent_node: TileMeta
+            f_cost: float
+            g_cost: float
+            g_cost: float
+
+        def get_distance(dest: Position) -> float:
+            pass
+
+        open_list = []
+        close_list = []
 
 
 class SupplyUnitMeta(UnitMeta):
