@@ -4,7 +4,7 @@ from abc import abstractmethod
 from typing import Optional
 
 
-class WSHandler:
+class SocketMeta:
     def __init__(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.conn: Optional[socket.socket] = None
