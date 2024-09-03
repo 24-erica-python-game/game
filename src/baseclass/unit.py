@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from os import PathLike
 from enum import IntEnum
-from base_tile import Position, TileMeta
+from tile import Position, TileMeta
 from dataclasses import dataclass
 
 class AnimationState(IntEnum):
@@ -61,4 +61,3 @@ class SupplyUnitMeta(UnitMeta):
 
     def supply(self, target_unit: UnitMeta):
         target_unit.supply_reserve += 100
-        

@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from typing import NamedTuple, Union, Optional
-from base_unit import UnitMeta
+from unit import UnitMeta
 
 
 class Position(NamedTuple):
@@ -43,4 +43,3 @@ class TileMeta(ABCMeta):
     @placed_unit.setter
     def place_unit(self, unit: UnitMeta) -> None:
         self.placed_unit = unit
-    

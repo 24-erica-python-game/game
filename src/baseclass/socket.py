@@ -1,6 +1,6 @@
 import socket
 import struct
-from abc import abstractmethod
+import sys
 from typing import Optional
 
 
@@ -34,23 +34,24 @@ class SocketMeta:
         :param encoding: 인코딩 형식, 기본값은 UTF-8, None 될 수 있음
         :return: 디코딩 된 데이터, 만약 encoding 파라미터가 None 경우 디코딩 되지 않은 바이트열을 반환함.
         """
-
         # 한글은 첫글자만 반환되며 이모지는 예외를 일으킴; 알파벳 또는 숫자만 사용할 것
         data_size = struct.unpack("!H", data[:2])[0]
         padding_size = self.msg_size - data_size - 2
         data = struct.unpack_from(f"!{data_size}s {padding_size}x", data, offset=2)[0]
         return data.decode(encoding) if encoding else data
 
-    @abstractmethod
     def read(self):
-        pass
+        recv_data = self.conn.recv(self.msg_size)
+        decoded = self.unpack(recv_data)
+        return decoded
 
-    @abstractmethod
     def write(self, data):
-        pass
+        try:
+            self.conn.send(self.pack(data))
+        except AttributeError:  # if None;
+            print("Connection is not established", file=sys.stderr)
 
 
-# example
 # h = WSHandler()
 # d = h._pack('19239')
 # print(h._unpack(d, None))
