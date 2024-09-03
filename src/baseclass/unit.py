@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from os import PathLike
 from enum import IntEnum
-from tile import Position, TileMeta
+from baseclass.tile import Position, Distance, TileMeta
 from dataclasses import dataclass
 
 class AnimationState(IntEnum):
@@ -29,6 +29,7 @@ class UnitMeta(ABCMeta):
     
 
     @abstractmethod
+    @anim_state.setter
     def _play_animation(self, anim_path: PathLike):
         pass
 
@@ -40,19 +41,17 @@ class UnitMeta(ABCMeta):
         """
         A* 알고리즘으로 구현
         """
-        @dataclass
-        class Node:
-            node_position: Position
-            parent_node: TileMeta
-            f_cost: float
-            g_cost: float
-            g_cost: float
-
-        def get_distance(dest: Position) -> float:
-            pass
-
-        open_list = []
+        rotation_vecs = [(+1, 0, -1), (0, +1, -1), (-1, +1, 0), 
+                         (-1, 0, +1), (0, -1, +1), (+1, -1, 0)]
+        open_list = [ self ]
         close_list = []
+
+        for vq, vr, vs in rotation_vecs:
+            open_list.append(TileMap[q+vq][r+vr][s+vs])
+
+        # F = G+H
+        # G: move_cost
+        # H: get_distance
 
 
 class SupplyUnitMeta(UnitMeta):
@@ -61,3 +60,7 @@ class SupplyUnitMeta(UnitMeta):
 
     def supply(self, target_unit: UnitMeta):
         target_unit.supply_reserve += 100
+        
+from itertools import permutations
+
+permutations(range(-1, 2), 3)
