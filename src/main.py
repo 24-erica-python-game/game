@@ -10,7 +10,9 @@ GREEN = (  0, 255,   0)
 RED   = (255,   0,   0)
 
 #화면 크기 지정
-size = [1280, 800]
+x = 1280
+y = 800
+size = [x, y]
 screen = pg.display.set_mode(size)
 
 pg.display.set_caption("Buggy Buddies")
@@ -29,14 +31,8 @@ while not done:
 
     screen.fill(WHITE)
 
-
-    pg.draw.polygon(screen, GREEN, [[30, 150], [125, 100], [220, 150]], 5)
-    pg.draw.polygon(screen, GREEN, [[30, 150], [125, 100], [220, 150]], 0)
-    pg.draw.lines(screen, RED, False, [[50, 150], [50, 250], [200, 250], [200, 150]], 5)
-    pg.draw.rect(screen, BLACK, [75, 175, 75, 50], 5)
-    pg.draw.rect(screen, BLUE, [75, 175, 75, 50], 0)
-    pg.draw.line(screen, BLACK, [112, 175], [112, 225], 5)
-    pg.draw.line(screen, BLACK, [75, 200], [150, 200], 5)
+    pg.draw.rect(screen, BLACK, [0,0,1280,50])
+    pg.draw.rect(screen, BLACK, [0,650,1280,150])
 
 
     pg.display.flip() #pygame의 메인 루프 끝에 반드시 사용
