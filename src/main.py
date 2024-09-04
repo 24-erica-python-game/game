@@ -12,9 +12,7 @@ GREEN = (  0, 255,   0)
 RED   = (255,   0,   0)
 
 #화면 크기 지정
-x = 1280
-y = 800
-size = [x, y]
+size = [1280, 800]
 screen = pg.display.set_mode(size)
 
 pg.display.set_caption("Buggy Buddies")
