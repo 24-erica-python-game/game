@@ -12,7 +12,7 @@ argument           ::= (string | number)
 command            ::= identifier ":" (argument,)* ";"
 """
 
-from src.multiplay.message.cmd_token import *
+from cmd_token import *
 
 
 class Scanner:

@@ -70,6 +70,7 @@ class MessageParser:
         curr_cmd = None
         tokens = []
         for token in tokenized:
+            print(f"token type: {type(token)} | {isinstance(token, Identifier)}")
             if isinstance(token, Identifier):  # False
                 # id(token.__class__) == 2723135292032
                 # id(Identifier) == 2723135266240
