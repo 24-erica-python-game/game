@@ -1,23 +1,23 @@
-from baseclass.base_unit import UnitMeta
-from baseclass.base_tile import Position
+from baseclasses.unit import BaseUnit
+from baseclasses.tile import Position
 
 
-class Ant(UnitMeta): # 개미
+class Ant(BaseUnit): # 개미
     def __init__(self, position: Position):
         super().__init__()
 
 
-class StagBeetle(UnitMeta): # 사슴벌레
+class StagBeetle(BaseUnit): # 사슴벌레
     def __init__(self, position: Position):
         super().__init__()
 
 
-class BombardierBeetle(UnitMeta): # 폭탄먼지벌레
+class BombardierBeetle(BaseUnit): # 폭탄먼지벌레
     def __init__(self, position: Position):
         super().__init__()
 
 
-class Aphid(UnitMeta): # 진딧물
+class Aphid(BaseUnit): # 진딧물
     def __init__(self, position: Position):
         super().__init__()
 

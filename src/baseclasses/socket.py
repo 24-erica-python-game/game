@@ -4,7 +4,7 @@ import sys
 from typing import Optional
 
 
-class SocketMeta:
+class BaseSocket:
     def __init__(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.conn: Optional[socket.socket] = None

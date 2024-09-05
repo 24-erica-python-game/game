@@ -1,8 +1,8 @@
 import sys
-from src.baseclass.socket import SocketMeta
+from src.baseclasses.socket import BaseSocket
 
 
-class Guest(SocketMeta):
+class Guest(BaseSocket):
     def __init__(self):
         super().__init__()
 

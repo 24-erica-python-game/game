@@ -1,7 +1,7 @@
-from src.baseclass.socket import SocketMeta
+from src.baseclasses.socket import BaseSocket
 
 
-class Host(SocketMeta):
+class Host(BaseSocket):
     def __init__(self, port: int):
         super().__init__()
         self.socket.bind(('localhost', port))

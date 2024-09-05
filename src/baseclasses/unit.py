@@ -1,11 +1,10 @@
 from abc import ABCMeta, abstractmethod
 from os import PathLike
-from baseclass.tile import TileMeta
-from baseclass.interface import *
+from baseclasses.interface import *
 from dataclasses import dataclass
 
 
-class UnitMeta(ABCMeta):
+class BaseUnit(ABCMeta):
     @property
     def anim_state(self) -> AnimationState:
         return self.anim_state
@@ -24,7 +23,6 @@ class UnitMeta(ABCMeta):
     
 
     @abstractmethod
-    @anim_state.setter
     def _play_animation(self, anim_path: PathLike):
         pass
 
@@ -49,10 +47,10 @@ class UnitMeta(ABCMeta):
         # H: get_distance
 
 
-class SupplyUnitMeta(UnitMeta):
+class BaseSupplyUnit(BaseUnit):
     def __init__(self, position: Position):
         pass
 
-    def supply(self, target_unit: UnitMeta):
+    def supply(self, target_unit: BaseUnit):
         target_unit.supply_reserve += 100
         
