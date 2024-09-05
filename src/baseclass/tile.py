@@ -1,19 +1,7 @@
 from abc import ABCMeta, abstractmethod
-from typing import NamedTuple, Optional
-from unit import UnitMeta
-
-
-class Position(NamedTuple):
-    q: int
-    r: int
-    s: int
-
-
-class Distance(NamedTuple):
-    d_q: int
-    d_r: int
-    d_s: int
-
+from typing import Optional
+from baseclass.unit import UnitMeta
+from baseclass.interface import *
 
 class TileMeta(ABCMeta):
     def __init__(self, q: int, r: int, s: int) -> None:

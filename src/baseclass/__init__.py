@@ -1,2 +1,2 @@
-from baseclass.base_tile import *
-from baseclass.base_unit import *
+from baseclass.tile import *
+from baseclass.unit import *

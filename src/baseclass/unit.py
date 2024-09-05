@@ -1,14 +1,9 @@
 from abc import ABCMeta, abstractmethod
 from os import PathLike
-from enum import IntEnum
-from baseclass.tile import Position, Distance, TileMeta
+from baseclass.tile import TileMeta
+from baseclass.interface import *
 from dataclasses import dataclass
 
-class AnimationState(IntEnum):
-    IDLE = 0
-    MOVE = 1
-    ATTACK = 2
-    DEFEND = 3
 
 class UnitMeta(ABCMeta):
     @property
@@ -61,6 +56,3 @@ class SupplyUnitMeta(UnitMeta):
     def supply(self, target_unit: UnitMeta):
         target_unit.supply_reserve += 100
         
-from itertools import permutations
-
-permutations(range(-1, 2), 3)
