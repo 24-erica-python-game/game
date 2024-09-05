@@ -1,5 +1,9 @@
 from dataclasses import dataclass
-from game.player import Player
+from types import FunctionType
+
+from src.game import command
+from src.game.player import Player
+
 
 @dataclass
 class GameRule:
@@ -12,7 +16,13 @@ class GameSystem:
     def __init__(self, ruleset: GameRule) -> None:
         self.players = [ Player(f"P{i+1}", ruleset.start_ticket) for i in range(2) ]
         self.current_turn = 0
+        self.callable_commands: dict[str, FunctionType] = command.commands
 
     def switch_turn(self) -> int:
-        
         self.current_turn = (self.current_turn + 1) % len(self.players)
+
+    def call(self, cmd_name: str, *args):
+        try:
+            self.callable_commands[cmd_name](*args)
+        except TypeError:
+            self.callable_commands[cmd_name]()
