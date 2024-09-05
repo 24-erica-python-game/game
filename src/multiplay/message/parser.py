@@ -1,10 +1,8 @@
-from types import FunctionType
 from typing import List
 
-from tokenizer import Scanner
 from cmd_token import *
-from src.game import command
-
+from tokenizer import Scanner
+from src.game.rule import GameSystem
 
 class MessageParser:
     def __init__(self, source: str, game: GameSystem):
@@ -53,11 +51,3 @@ class MessageParser:
         """
         commands = self.parse()
         self.execute(commands)
-
-
-game_system = GameSystem()
-msg_parser = MessageParser("_call_test_with_args:'arg1',500;", game_system)
-l = msg_parser.parse()
-msg_parser.run()
-msg_parser = MessageParser("_call_test_without_args;", game_system)
-msg_parser.run()
