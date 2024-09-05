@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from types import FunctionType
 
-from src.game import command
-from src.game.player import Player
+from game import command
+from game.player import Player
 
 
 @dataclass
