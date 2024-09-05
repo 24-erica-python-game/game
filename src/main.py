@@ -38,7 +38,7 @@ minimap = font.render("미니맵", True, BLACK)
 #유닛정보 표시내용
 unit_info = font.render("유닛 정보", True, BLACK)
 active_point_info = font.render("활동력: {}".format(active_point), True, BLACK)
-player_hp_info = font.render("체력: {}".format(player_hp), True, BLACK)
+player_hp_info = font.render("체   력: {}".format(player_hp), True, BLACK)
 supply_info = font.render("보급량: {}".format(supply), True, BLACK)
 player_power_info = font.render("공격력: {}".format(player_power), True, BLACK)
 
