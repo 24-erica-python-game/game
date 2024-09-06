@@ -1,13 +1,12 @@
 from typing import Optional
-from enum import Enum
+from enum import IntEnum
 
 from src.baseclasses import BaseUnit
 
 
 type t_unit_data = list[BaseUnit, int]
 
-
-class SetMode(Enum):
+class SetMode(IntEnum):
     ADD = 0
     SET = 1
     SUB = 2

@@ -59,6 +59,7 @@ class CubeCoordinates:
     def _cube_to_axial_coordinates(c: CubeCoordinates) -> AxialCoordinates:
         return AxialCoordinates(q=c.q, r=c.r)
 
+
 class HexDirections(IntEnum):
     """
     육각형에서 각 면을 나타내는 방향을 나타내는 열거형
@@ -81,6 +82,7 @@ class Distance(NamedTuple):
 class _Direction(NamedTuple):
     q: int
     r: int
+
 
 class HexDirectionVectors(Enum):
     """
@@ -113,3 +115,4 @@ class AnimationState(IntEnum):
     MOVE = 1
     ATTACK = 2
     DEFEND = 3
+    

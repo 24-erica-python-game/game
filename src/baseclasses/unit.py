@@ -36,7 +36,12 @@ class BaseUnit(ABCMeta):
         올바른 이동일 경우 `True` 반환
         """
         # TODO: 이동 로직 구현
-        pass
+        try:
+            
+            # return self.movement_cost >= sum(path.cost)
+            return True
+        except IndexError:
+            return False
 
 
 class BaseSupplyUnit(BaseUnit):

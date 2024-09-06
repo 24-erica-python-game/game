@@ -1,0 +1,21 @@
+{
+    "tile_definition": {
+        "field": {
+            "symbol": "#",
+            "movement_cost": 1
+        },
+        "hill": {
+            "symbol": "*",
+            "movement_cost": 2
+        },
+        "mountain": {
+            "symbol": "^",
+            "movement_cost": 4
+        }
+    },
+    "map_data": [
+        "######^^^^##########",
+        "#########^#*****####",
+        "##############*#####"
+    ]
+}

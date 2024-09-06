@@ -17,17 +17,19 @@ class Tile(BaseTile):
 
     def get_neighbors(self) -> List[AxialCoordinates]:
         super().get_neighbors()
+        # TODO: 새 타일 생성 대신 맵에서 인근 타일 가져오는 방식으로 변경
         return [ Tile(self.position.q+v.value.q, self.position.r+v.value.r) for v in HexDirectionVectors ]
 
     def get_path(self, destination: Position) -> List[Position]:
+        # TODO: 테스트 필요
         frontier = PriorityQueue()
         frontier.put((self, 0))
 
         trail = {}
-        far_costs = {}
+        far_cost = {}
 
         trail[self] = None
-        far_costs[self] = 0
+        far_cost[self] = 0
 
         while not frontier.empty():
             curr = frontier.get()
@@ -36,7 +38,12 @@ class Tile(BaseTile):
                 break
 
             for nxt in curr[0].get_neighbors():
-                pass
+                new_cost = far_cost[self] + self.get_distance(nxt)
+                if nxt not in far_cost or new_cost < far_cost[self]:
+                    far_cost[self] = new_cost
+                    prior = new_cost + nxt.movement_cost
+                    frontier.put(nxt, prior)
+                    trail[nxt] = self
 
 
 class SupplyBase(Tile):
@@ -47,10 +54,6 @@ class TileMap(BaseTileMap):
     def __new__(cls):
         if not hasattr(cls, "instance"):
             cls.instance = super(TileMap, cls).__new__(cls)
-            cls.tile_map: List[List[BaseTile]] = []
+            cls.tile_map: List[List[Tile]] = []
         
         return cls.instance
-
-
-class SupplyBase(BaseTile):
-    pass
