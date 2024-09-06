@@ -3,24 +3,14 @@ from typing import Optional
 from baseclasses.unit import BaseUnit
 from baseclasses.interface import *
 
-class BaseTile(ABCMeta):
-    def __init__(self, q: int, r: int, s: int) -> None:
-        self.q = q
-        self.r = r
-        self.s = s
 
-    @property
-    def q(self) -> int:
-        return self.q
-    
-    @property
-    def r(self) -> int:
-        return self.r
-    
-    @property
-    def s(self) -> int:
-        return self.s
-
+class BaseTile: pass
+class BaseTile(metaclass=ABCMeta):
+    """
+    | https://www.redblobgames.com/grids/hexagons/
+    | 기본: `Axial Coordinates` 사용
+    | 필요 시 `Cube Coordinates` 사용
+    """
     @property
     def placed_unit(self) -> Optional[BaseUnit]:
         return self.placed_unit
@@ -28,16 +18,10 @@ class BaseTile(ABCMeta):
     @property
     def defence_bonus(self) -> int:
         return self.defence_bonus
+    
 
-
-    def __sub__(self, a: Position):
-        return BaseTile(self.q - a.q, self.r - a.r, self.s - a.s)
-        
-    def __add__(self, a: Position):
-        return BaseTile(self.q + a.q, self.r + a.r, self.s + a.s)
-
-    def __abs__(self):
-        return BaseTile(abs(self.q), abs(self.r), abs(self.s))
+    def __init__(self, q: int, r: int) -> None:
+        self.position = Position(q, r)
 
 
     @abstractmethod
@@ -48,11 +32,34 @@ class BaseTile(ABCMeta):
     def place_unit(self, unit: BaseUnit) -> None:
         self.placed_unit = unit
 
-    @staticmethod
-    def get_distance(self, b: Position) -> float:
-        vec: Distance = BaseTileMap[BaseTile.position] # 현재 지도를 나타내는 객체 생길 경우 그 객체로 변경
-                                                       # __index__() 필요
-        return (abs(vec.d_q) + abs(vec.d_r) + abs(vec.d_s)) / 2
+    def get_distance(self, opposite: BaseTile) -> float:
+        vec: Position = self.position - opposite.position
+        return Distance((
+            abs(vec.q) +
+            abs(vec.r) +
+            abs(vec.q  + vec.r)) / 2)
+
+    @abstractmethod
+    def get_neighbors(self) -> list[AxialCoordinates]:
+        pass
+
+    def get_path(self, b: Position) -> list[Position]:
+        """
+        a -> b로 이동하는 경로 리스트 반환
+        """
+        # 경로 탐색 구현
+        # TileMeta.get_path() 에서 경로 계산 결과 반환 
+        # UnitMeta.move() 에서 결과 값을 토대로 이동
+
+        open_list = [ ]
+        close_list = [ ]
+
+        for vec in HexDirectionVectors:
+            open_list.append()
+
+        # F = G+H
+        # G: move_cost
+        # H: get_distance
     
 
 class BaseTileMap:
