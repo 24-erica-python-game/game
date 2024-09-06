@@ -32,7 +32,21 @@ player_hp = 100
 supply = 1000
 player_power = 50
 
+left_enemy_unit = 5
+left_player_unit = 7
+left_ticket = 2
+deck_info = None
+turn_ct = 13
+
+#게임정보 표시내용
 game_info = font.render("게임 정보", True, BLACK) #(Text, antialias,color, background color)
+left_enemy_unit_info = font.render("남은 적 유닛: {}".format(left_enemy_unit), True, BLACK)
+left_player_unit_info = font.render("남은 아군 유닛: {}".format(left_player_unit), True, BLACK)
+left_ticket_info = font.render("남은 티켓: {}".format(left_ticket), True, BLACK)
+deck_info_info = font.render("덱 정보: {}".format(deck_info), True, BLACK)
+turn_ct_info = font.render("현재 턴 수: {}".format(turn_ct), True, BLACK)
+
+#미니맵 표시내용
 minimap = font.render("미니맵", True, BLACK)
 
 #유닛정보 표시내용
