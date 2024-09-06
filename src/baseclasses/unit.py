@@ -26,25 +26,13 @@ class BaseUnit(ABCMeta):
     def _play_animation(self, anim_path: PathLike):
         pass
 
-    def move(self, destination: Position) -> bool:
+    def move(self, path: list[Position]) -> bool:
+        """
+        `BaseTile.get_path()`의 반환 값 토대로 유닛 이동. \n
+        올바른 이동일 경우 `True` 반환
+        """
         # TODO: 이동 로직 구현
         pass
-
-    def find_path(self, destination: Position) -> list:
-        """
-        A* 알고리즘으로 구현
-        """
-        rotation_vecs = [(+1, 0, -1), (0, +1, -1), (-1, +1, 0), 
-                         (-1, 0, +1), (0, -1, +1), (+1, -1, 0)]
-        open_list = [ self ]
-        close_list = []
-
-        for vq, vr, vs in rotation_vecs:
-            open_list.append(TileMap[q+vq][r+vr][s+vs])
-
-        # F = G+H
-        # G: move_cost
-        # H: get_distance
 
 
 class BaseSupplyUnit(BaseUnit):
