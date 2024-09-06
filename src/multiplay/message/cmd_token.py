@@ -5,7 +5,8 @@ class Token:
 
 class String(Token):
     def __init__(self, lexeme):
-        super().__init__(lexeme)
+        content = lexeme[1:-1]
+        super().__init__(content)
 
 
 class Number(Token):

@@ -1,8 +1,9 @@
 from dataclasses import dataclass
 from types import FunctionType
 
-from game import command
-from game.player import Player
+from . import Deck
+from ..game import command
+from ..game.player import Player
 
 
 @dataclass
@@ -14,7 +15,7 @@ class GameRule:
 
 class GameSystem:
     def __init__(self, ruleset: GameRule) -> None:
-        self.players = [ Player(f"P{i+1}", ruleset.start_ticket) for i in range(2) ]
+        self.players = [ Player(f"P{i+1}", ruleset.start_ticket, Deck()) for i in range(2) ]
         self.current_turn = 0
         self.callable_commands: dict[str, FunctionType] = command.commands
 

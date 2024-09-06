@@ -22,7 +22,7 @@ class Tile(BaseTile):
     def get_path(self, destination: Position) -> List[Position]:
         frontier = PriorityQueue()
         frontier.put((self, 0))
-        
+
         trail = {}
         far_costs = {}
 
@@ -50,3 +50,7 @@ class TileMap(BaseTileMap):
             cls.tile_map: List[List[BaseTile]] = []
         
         return cls.instance
+
+
+class SupplyBase(BaseTile):
+    pass

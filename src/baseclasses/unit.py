@@ -20,7 +20,11 @@ class BaseUnit(ABCMeta):
     @property
     def supply_reserve(self) -> int:
         return self.supply_reserve
-    
+
+    @property
+    def cost(self) -> int:
+        return self.cost
+
 
     @abstractmethod
     def _play_animation(self, anim_path: PathLike):
@@ -41,4 +45,3 @@ class BaseSupplyUnit(BaseUnit):
 
     def supply(self, target_unit: BaseUnit):
         target_unit.supply_reserve += 100
-        

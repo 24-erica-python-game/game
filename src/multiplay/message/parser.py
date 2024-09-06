@@ -11,35 +11,40 @@ class MessageParser:
         self.game = game
 
     def parse(self) -> List[Identifier]:
+        """
+        주어진 소스를 파싱해 명령으로 변환함
+        :return: 변환된 명령
+        """
         scanner = Scanner(self.source)
         tokenized = scanner.tokenize()
         curr_cmd = None
         tokens = []
         for token in tokenized:
-            print(f"token type: {type(token)} | {isinstance(token, Identifier)}")
-            if isinstance(token, Identifier):  # False
-                # id(token.__class__) == 2723135292032
-                # id(Identifier) == 2723135266240
+            if isinstance(token, Identifier):
                 curr_cmd = token
                 tokens.append(curr_cmd)
             else:
                 try:
                     assert curr_cmd is not None
                 except AssertionError:  # if curr_cmd is None;
-                    raise AssertionError("""
-                    Expected instance of Identifier, got None.
-                    The first argument must be instance of Identifier.
-                    """)
+                    raise AssertionError("""Expected instance of Identifier, got None.
+                    The first argument must be instance of Identifier.""")
                 else:
                     curr_cmd.args.append(token)
         return tokens
 
     def execute(self, command_list: List[Identifier]):
+        """
+        매개변수로 받은 명령을 실행함
+        :param command_list: 명령 목록
+        """
         for command in command_list:
             self.game.call(command.lexeme, command.args)
 
     def run(self):
         """
+        소스를 파싱한 다음 명령을 실행함.
+
         >>> msg_parser = MessageParser("...")
         >>> l = msg_parser.parse()
         >>> msg_parser.execute(l)
