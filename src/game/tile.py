@@ -3,9 +3,42 @@ from baseclasses.tile import *
 
 from queue import PriorityQueue
 from typing import List
+import json
 
 
-class Tile(BaseTile):
+class CommonTile(BaseTile):       pass
+class SupplyBaseTile(CommonTile): pass
+class HQTile(CommonTile):         pass
+class HillTile(CommonTile):       pass
+class FieldTile(CommonTile):      pass
+class MountainTile(CommonTile):   pass
+
+
+class TileMap(BaseTileMap):
+    @staticmethod
+    def __parse_map(raw_map_data: list[str]) -> BaseTileMap:
+        tile_definition: dict[str, dict[str, str]] = raw_map_data["tile_definition"]
+        translate_table = {}
+        parsed_tile_map: list = []
+
+        for tile_type in tile_definition.keys():
+            tile_type[0] = tile_type[0].capitalize()
+            tile_type_class_name = f""
+            translate_table.update({ tile_definition[tile_type]["symbol"]: getattr() })
+    
+    def __new__(cls, map_name: str):
+        if not hasattr(cls, "instance"):
+            with open(f"assets/maps/{map_name}.json") as file_stream:
+                raw_map_data: dict = json.loads(file_stream.read())
+                map_data: List[List[str]] = raw_map_data["map_data"]
+                
+                cls.instance = super(TileMap, cls).__new__(cls, min(map(len, map_data)))
+                cls.tile_map: List[BaseTileMap] = cls.__parse_map(raw_map_data)
+
+        return cls.instance
+
+
+class CommonTile(BaseTile):
     def __init__(self, q: int, r: int) -> None:
         super().__init__(q, r)
 
@@ -15,10 +48,10 @@ class Tile(BaseTile):
     def on_arrived(self) -> None:
         pass
 
-    def get_neighbors(self) -> List[AxialCoordinates]:
+    def get_neighbors(self, tile_map: TileMap) -> List[AxialCoordinates]:
         super().get_neighbors()
         # TODO: 새 타일 생성 대신 맵에서 인근 타일 가져오는 방식으로 변경
-        return [ Tile(self.position.q+v.value.q, self.position.r+v.value.r) for v in HexDirectionVectors ]
+        return [ tile_map[self.position.q+v.value.q][self.position.r+v.value.r] for v in HexDirectionVectors ]
 
     def get_path(self, destination: Position) -> List[Position]:
         # TODO: 테스트 필요
@@ -46,14 +79,21 @@ class Tile(BaseTile):
                     trail[nxt] = self
 
 
-class SupplyBase(Tile):
+class SupplyBase(CommonTile):
     pass
 
 
-class TileMap(BaseTileMap):
-    def __new__(cls):
-        if not hasattr(cls, "instance"):
-            cls.instance = super(TileMap, cls).__new__(cls)
-            cls.tile_map: List[List[Tile]] = []
-        
-        return cls.instance
+class HQTile(CommonTile):
+    pass
+
+
+class HillTile(CommonTile):
+    pass
+
+
+class FieldTile(CommonTile):
+    pass
+
+
+class MountainTile(CommonTile):
+    pass
