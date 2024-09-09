@@ -3,6 +3,7 @@ from dataclasses import dataclass
 import pygame as pg
 
 from src.baseclasses.ui.ui import UI, UIPosition, UISize
+from src.utils.config import Config
 
 
 @dataclass
@@ -19,8 +20,9 @@ class GameInfo(UI):
                  player_unit: int,
                  player_ticket: int,
                  turn_count: int):
-        self.font = pg.font.SysFont('malgungothic', 18, False, False)
-        self.position = UIPosition(0, 0)
+        self.font = pg.font.SysFont(Config.get_config("font.default_font"),
+                                    Config.get_config("font.default_size"))
+        self.position = UIPosition(640, 10)
         self.size = UISize(1280, 50)
         self.game_info = GameInfoData(enemy_unit, player_unit, player_ticket, turn_count)
 
