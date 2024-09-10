@@ -1,3 +1,4 @@
+from abc import abstractmethod, ABCMeta
 from typing import NamedTuple
 
 from pygame.font import Font
@@ -13,7 +14,7 @@ class UISize(NamedTuple):
     y: int
 
 
-class UI:
+class UI(ABCMeta):
     @property
     def position(self) -> UIPosition:
         return self.position
@@ -37,3 +38,7 @@ class UI:
     @font.setter
     def font(self, font: Font):
         self.font = font
+
+    @abstractmethod
+    def render(self):
+        pass
