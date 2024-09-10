@@ -1,4 +1,4 @@
-from src.multiplay.socket import BaseSocket
+from src.multiplay.base_socket import BaseSocket
 
 
 class Host(BaseSocket):

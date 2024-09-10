@@ -1,8 +1,9 @@
 from typing import List
 
 from cmd_token import *
-from tokenizer import Scanner
 from src.game.rule import GameSystem
+from tokenizer import Scanner
+
 
 class MessageParser:
     def __init__(self, source: str, game: GameSystem):

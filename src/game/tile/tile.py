@@ -1,9 +1,8 @@
-from baseclasses.types import *
-from baseclasses.tile import *
-
+import json
 from queue import PriorityQueue
 from typing import Any
-import json
+
+from src.game.tile.base import *
 
 
 class CommonTile(BaseTile):       pass
@@ -31,7 +30,8 @@ class TileMap(BaseTileMap):
             with open(f"assets/maps/{map_name}.json") as file_stream:
                 raw_map_data: dict = json.loads(file_stream.read())
                 
-                cls.instance = super(TileMap, cls).__new__(cls, raw_map_data["metadata"]["map_size"][1])
+                # cls.instance = super(TileMap, cls).__new__(cls, raw_map_data["metadata"]["map_size"][1])
+                cls.instance = super(TileMap, cls).__new__(cls)
                 cls.tile_map: list[BaseTileMap] = cls.__parse_map(raw_map_data)
 
         return cls.instance

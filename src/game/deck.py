@@ -1,8 +1,7 @@
-from typing import Optional
 from enum import IntEnum
+from typing import Optional
 
-from baseclasses import BaseUnit
-
+from src.game.unit.base import BaseUnit
 
 type t_unit_data = list[BaseUnit, int]
 

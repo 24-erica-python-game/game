@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from os import PathLike
-from baseclasses.types import *
-from dataclasses import dataclass
+
+from src.game.tile.types import *
 
 
 class BaseUnit(ABCMeta):

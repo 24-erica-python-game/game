@@ -1,5 +1,6 @@
-from baseclasses import Position, BaseUnit
-from game.deck import Deck
+from src.game.deck import Deck
+from src.game.tile.types import Position
+from src.game.unit.base import BaseUnit
 
 
 class Player:
