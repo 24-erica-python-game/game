@@ -1,5 +1,5 @@
 import sys
-from src.baseclasses.socket import BaseSocket
+from src.multiplay.socket import BaseSocket
 
 
 class Guest(BaseSocket):

@@ -40,5 +40,5 @@ class UI(ABCMeta):
         self.font = font
 
     @abstractmethod
-    def render(self):
+    def render(self, *args):
         pass
