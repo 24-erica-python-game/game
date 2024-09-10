@@ -1,8 +1,8 @@
-from baseclasses.interface import *
+from baseclasses.types import *
 from baseclasses.tile import *
 
 from queue import PriorityQueue
-from typing import List
+from typing import Any
 import json
 
 
@@ -17,23 +17,22 @@ class MountainTile(CommonTile):   pass
 class TileMap(BaseTileMap):
     @staticmethod
     def __parse_map(raw_map_data: list[str]) -> BaseTileMap:
-        tile_definition: dict[str, dict[str, str]] = raw_map_data["tile_definition"]
-        translate_table = {}
-        parsed_tile_map: list = []
+        metadata: dict[dict[Any]] = raw_map_data["metadata"]
+        map_data: list[dict[Any]] = raw_map_data["map_data"]
 
-        for tile_type in tile_definition.keys():
-            tile_type[0] = tile_type[0].capitalize()
-            tile_type_class_name = f""
-            translate_table.update({ tile_definition[tile_type]["symbol"]: getattr() })
+        return_value: BaseTileMap = BaseTileMap((20, 30), CommonTile)
+
+        for data in map_data:
+            pass
+            
     
     def __new__(cls, map_name: str):
         if not hasattr(cls, "instance"):
             with open(f"assets/maps/{map_name}.json") as file_stream:
                 raw_map_data: dict = json.loads(file_stream.read())
-                map_data: List[List[str]] = raw_map_data["map_data"]
                 
-                cls.instance = super(TileMap, cls).__new__(cls, min(map(len, map_data)))
-                cls.tile_map: List[BaseTileMap] = cls.__parse_map(raw_map_data)
+                cls.instance = super(TileMap, cls).__new__(cls, raw_map_data["metadata"]["map_size"][1])
+                cls.tile_map: list[BaseTileMap] = cls.__parse_map(raw_map_data)
 
         return cls.instance
 
@@ -48,12 +47,12 @@ class CommonTile(BaseTile):
     def on_arrived(self) -> None:
         pass
 
-    def get_neighbors(self, tile_map: TileMap) -> List[AxialCoordinates]:
+    def get_neighbors(self, tile_map: TileMap) -> list[AxialCoordinates]:
         super().get_neighbors()
         # TODO: 새 타일 생성 대신 맵에서 인근 타일 가져오는 방식으로 변경
         return [ tile_map[self.position.q+v.value.q][self.position.r+v.value.r] for v in HexDirectionVectors ]
 
-    def get_path(self, destination: Position) -> List[Position]:
+    def get_path(self, destination: Position) -> list[Position]:
         # TODO: 테스트 필요
         frontier = PriorityQueue()
         frontier.put((self, 0))

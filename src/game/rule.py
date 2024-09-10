@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 from types import FunctionType
 
-from . import Deck
-from ..game import command
-from ..game.player import Player
+from game import Deck
+from game import command
+from game.player import Player
 
 
 @dataclass

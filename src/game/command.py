@@ -1,4 +1,4 @@
-from src.multiplay.message.cmd_token import Number, String
+from multiplay.message.cmd_token import Number, String
 
 commands = dict()
 

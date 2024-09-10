@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from typing import Optional
 from baseclasses.unit import BaseUnit
-from baseclasses.interface import *
+from baseclasses.types import *
 
 
 class BaseTile: pass
@@ -31,6 +31,15 @@ class BaseTile(metaclass=ABCMeta):
     def on_arrived(self) -> None:
         pass
 
+    @abstractmethod
+    def get_neighbors(self) -> list[AxialCoordinates]:
+        pass
+
+    @abstractmethod
+    def get_path(self, b: Position) -> list[Position]:
+        pass
+
+
     @placed_unit.setter
     def place_unit(self, unit: BaseUnit) -> None:
         self.placed_unit = unit
@@ -42,28 +51,18 @@ class BaseTile(metaclass=ABCMeta):
             abs(vec.r) +
             abs(vec.q  + vec.r)) / 2)
 
-    @abstractmethod
-    def get_neighbors(self) -> list[AxialCoordinates]:
-        pass
-
-    @abstractmethod
-    def get_path(self, b: Position) -> list[Position]:
-        """
-        a -> b로 이동하는 경로 리스트 반환
-        """
-        # 경로 탐색 구현
-        # TileMeta.get_path() 에서 경로 계산 결과 반환 
-        # UnitMeta.move() 에서 결과 값을 토대로 이동
-    
 
 class BaseTileMap:
-    """
-    | 타일을 1차원으로 배열한 클래스.
-    | 2차원 지도로 사용하기 위해서는 `List[BaseTileMap]` 형태로 사용
-    """
-    def __new__(cls, size: int):
+    class Size(NamedTuple):
+        width:  int
+        height: int
+        
+    def __init__(cls, size: Size, default_tile: BaseTile):
         cls.size = size
-        cls._map: list[BaseTileMap] = []
+        cls._map = [ [ default_tile(i, j) for j in range(size.width) ] for i in range(size.height) ]
 
-    def __getitem__(self, idx: int):
+    def __getitem__(self, idx: int) -> BaseTile:
         return self._map[idx]
+    
+    def __setitem__(self, idx: int, value: BaseTile) -> None:
+        self._map[idx] = value

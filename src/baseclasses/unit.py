@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from os import PathLike
-from baseclasses.interface import *
+from baseclasses.types import *
 from dataclasses import dataclass
 
 

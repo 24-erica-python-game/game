@@ -1,5 +1,5 @@
-from ..baseclasses import Position, BaseUnit
-from ..game.deck import Deck
+from baseclasses import Position, BaseUnit
+from game.deck import Deck
 
 
 class Player:
