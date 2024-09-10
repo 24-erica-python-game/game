@@ -27,7 +27,7 @@ class Position(AxialCoordinates):
         )
     
     @staticmethod
-    def _axial_to_cube_coordinates(c: AxialCoordinates) -> CubeCoordinates:
+    def axial_to_cube_coordinates(c: AxialCoordinates) -> CubeCoordinates:
         return CubeCoordinates(q=c.q, r=c.r, s=(-c.q - c.r))
 
 
@@ -56,7 +56,7 @@ class CubeCoordinates:
         )
     
     @staticmethod
-    def _cube_to_axial_coordinates(c: CubeCoordinates) -> AxialCoordinates:
+    def cube_to_axial_coordinates(c: CubeCoordinates) -> AxialCoordinates:
         return AxialCoordinates(q=c.q, r=c.r)
 
 
@@ -95,24 +95,3 @@ class HexDirectionVectors(Enum):
     WEST      = _Direction(-1,  0)
     NORTHWEST = _Direction( 0, -1)
     NORTHEAST = _Direction(+1, -1)
-
-
-class AnimationState(IntEnum):
-    """
-    IDLE
-        기본 상태 (아무런 행동도 없을 경우)
-
-    MOVE
-        이동 시 애니메이션
-
-    ATTACK
-        공격 시 애니메이션
-
-    DEFEND
-        방어 시 애니메이션
-    """
-    IDLE = 0
-    MOVE = 1
-    ATTACK = 2
-    DEFEND = 3
-    

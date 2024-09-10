@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from typing import Optional
-from baseclasses.unit import BaseUnit
-from baseclasses.interface import *
+from unit.base import BaseUnit
+from tile.types import *
 
 
 class BaseTile: pass

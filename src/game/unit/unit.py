@@ -1,5 +1,5 @@
-from baseclasses.unit import BaseUnit
-from baseclasses.tile import Position
+from unit.base import BaseUnit
+from tile.types import Position
 
 
 class Ant(BaseUnit): # 개미

@@ -1,7 +1,7 @@
 from typing import Optional
 from enum import IntEnum
 
-from src.baseclasses import BaseUnit
+from unit.base import BaseUnit
 
 
 type t_unit_data = list[BaseUnit, int]

@@ -1,5 +1,6 @@
-from baseclasses.interface import *
-from baseclasses.tile import *
+from tile.types import *
+from tile.base import *
+from tile.base import *
 
 from queue import PriorityQueue
 from typing import List
