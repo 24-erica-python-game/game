@@ -68,10 +68,17 @@ while running:
     screen.fill(WHITE)
 
     pg.draw.rect(screen, GREEN, [0,0,1280,50]) #게임정보
+
+    screen.blit(unit_info, (150,20))
+    screen.blit(active_point_info, (350,20))
+    screen.blit(player_hp_info, (550,20))
+    screen.blit(supply_info, (750,20))
+    screen.blit(player_power_info, (950,20))
+    
     pg.draw.rect(screen, GREEN, [0,650,150,150]) #맵
     pg.draw.rect(screen, GREEN, [1080,650,200,150]) #유닛
     
-    screen.blit(game_info, (640, 10))
+    screen.blit(game_info, (640, 0))
     screen.blit(minimap, (50,700))
 
     screen.blit(unit_info,(1150, 650))
@@ -82,4 +89,3 @@ while running:
     screen.blit(player_power_info, (1100,750))
 
     pg.display.flip() #pygame의 메인 루프 끝에 반드시 사용
-print(pg.font.get_fonts())
