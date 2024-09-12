@@ -23,8 +23,7 @@ class TileMap(BaseTileMap):
 
         for data in map_data:
             pass
-            
-    
+
     def __new__(cls, map_name: str):
         if not hasattr(cls, "instance"):
             with open(f"assets/maps/{map_name}.json") as file_stream:

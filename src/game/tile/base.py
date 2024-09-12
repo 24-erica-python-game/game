@@ -4,6 +4,26 @@ from src.game.tile.types import *
 from src.game.unit.base import BaseUnit
 
 
+class AnimationState(IntEnum):
+    """
+    IDLE
+        기본 상태 (아무런 행동도 없을 경우)
+
+    MOVE
+        이동 시 애니메이션
+
+    ATTACK
+        공격 시 애니메이션
+
+    DEFEND
+        방어 시 애니메이션
+    """
+    IDLE = 0
+    MOVE = 1
+    ATTACK = 2
+    DEFEND = 3
+
+
 class BaseTile: pass
 class BaseTile(metaclass=ABCMeta):
     """
@@ -57,9 +77,9 @@ class BaseTileMap:
         width:  int
         height: int
         
-    def __init__(cls, size: Size, default_tile: BaseTile):
-        cls.size = size
-        cls._map = [ [ default_tile(i, j) for j in range(size.width) ] for i in range(size.height) ]
+    def __init__(self, size: tuple[int, int], default_tile: BaseTile):
+        self.size = size
+        self._map = [[default_tile(i, j) for j in range(size[0])] for i in range(size[1])]
 
     def __getitem__(self, idx: int) -> BaseTile:
         return self._map[idx]

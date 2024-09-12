@@ -1,6 +1,7 @@
 from abc import abstractmethod, ABCMeta
 from typing import NamedTuple
 
+from pygame import Surface
 from pygame.font import Font
 
 
@@ -34,7 +35,7 @@ def to_rgb(color: RGBA) -> RGB:
     return RGB(color.r, color.g, color.b)
 
 
-class BaseUI(ABCMeta):
+class BaseUI:
     @property
     def position(self) -> UIPosition:
         return self.position
@@ -59,6 +60,5 @@ class BaseUI(ABCMeta):
     def font(self, font: Font):
         self.font = font
 
-    @abstractmethod
-    def render(self, *args):
-        pass
+    def render(self, *args, **kwargs):
+        raise NotImplementedError

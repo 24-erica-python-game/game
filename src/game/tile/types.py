@@ -1,3 +1,4 @@
+import math
 from enum import IntEnum, Enum
 from typing import NamedTuple, Optional
 
@@ -97,22 +98,26 @@ class HexDirectionVectors(Enum):
     NORTHEAST = _Direction(+1, -1)
 
 
-class AnimationState(IntEnum):
+class ActualPosition(NamedTuple):
     """
-    IDLE
-        기본 상태 (아무런 행동도 없을 경우)
-
-    MOVE
-        이동 시 애니메이션
-
-    ATTACK
-        공격 시 애니메이션
-
-    DEFEND
-        방어 시 애니메이션
+    실제로 사용자에게 보이는 위치를 기준으로 하는 좌표.
+    즉, 실제로 게임 내에서 그리기에 사용되는 좌표
     """
-    IDLE = 0
-    MOVE = 1
-    ATTACK = 2
-    DEFEND = 3
-    
+    x: float
+    y: float
+
+
+def get_tile_point_position(actual_tile_pos: ActualPosition,
+                            size: float,
+                            direction: HexDirections):
+    """
+    타일의 꼭짓점의 실제 좌표를 구함
+    :param actual_tile_pos:
+    :param size:
+    :param direction:
+    :return:
+    """
+    angle_deg = 60 * direction - 30
+    angle_rad = math.radians(angle_deg)
+    return ActualPosition(actual_tile_pos.x + (size * math.cos(angle_rad)),
+                          actual_tile_pos.y + (size * math.sin(angle_rad)))

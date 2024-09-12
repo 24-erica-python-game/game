@@ -3,7 +3,9 @@ from typing import Optional
 
 from src.game.unit.base import BaseUnit
 
+
 type t_unit_data = list[BaseUnit, int]
+
 
 class SetMode(IntEnum):
     ADD = 0
