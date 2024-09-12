@@ -4,6 +4,26 @@ from os import PathLike
 from src.game.tile.types import *
 
 
+class AnimationState(IntEnum):
+    """
+    IDLE
+        기본 상태 (아무런 행동도 없을 경우)
+
+    MOVE
+        이동 시 애니메이션
+
+    ATTACK
+        공격 시 애니메이션
+
+    DEFEND
+        방어 시 애니메이션
+    """
+    IDLE = 0
+    MOVE = 1
+    ATTACK = 2
+    DEFEND = 3
+
+
 class BaseUnit(ABCMeta):
     @property
     def anim_state(self) -> AnimationState:

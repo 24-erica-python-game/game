@@ -4,26 +4,6 @@ from src.game.tile.types import *
 from src.game.unit.base import BaseUnit
 
 
-class AnimationState(IntEnum):
-    """
-    IDLE
-        기본 상태 (아무런 행동도 없을 경우)
-
-    MOVE
-        이동 시 애니메이션
-
-    ATTACK
-        공격 시 애니메이션
-
-    DEFEND
-        방어 시 애니메이션
-    """
-    IDLE = 0
-    MOVE = 1
-    ATTACK = 2
-    DEFEND = 3
-
-
 class BaseTile: pass
 class BaseTile(metaclass=ABCMeta):
     """
