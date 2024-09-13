@@ -1,18 +1,16 @@
-from abc import abstractmethod, ABCMeta
 from typing import NamedTuple
 
-from pygame import Surface
 from pygame.font import Font
 
 
 class UIPosition(NamedTuple):
-    x: int
-    y: int
+    x: float
+    y: float
 
 
 class UISize(NamedTuple):
-    x: int
-    y: int
+    x: float
+    y: float
 
 
 class RGB(NamedTuple):

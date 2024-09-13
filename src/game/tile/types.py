@@ -107,7 +107,7 @@ class ActualPosition(NamedTuple):
     y: float
 
 
-def get_tile_point_position(actual_tile_pos: ActualPosition,
+def get_hex_vertex_position(actual_tile_pos: ActualPosition,
                             size: float,
                             direction: HexDirections):
     """

@@ -3,26 +3,26 @@ from typing import Literal
 import pygame as pg
 
 from src.game.ui.base import BaseUI, UIPosition
-from src.game.tile.types import ActualPosition, get_tile_point_position, HexDirections
+from src.game.tile.types import ActualPosition, get_hex_vertex_position, HexDirections
 from src.game.ui.color import Color
 
 
 class InTileUnitInfo(BaseUI):
     def __init__(self,
                  center_position: UIPosition,
-                 size: float,
+                 radius: float,
                  bar_padding: UIPosition,
                  bar_fill_margin: UIPosition,):
         """
         :param center_position: 타일의 중점의 위치
-        :param size: 타일의 한 모서리의 크기
+        :param radius: 타일의 한 모서리의 크기
         :param bar_padding: 바를 그릴 때 타일의 모서리에서 얼마나 띄울지의 값
         :param bar_fill_margin: 바를 채울 때 빈 바를 보이게 할 지의 값
         """
         self.center_position = center_position
-        self._size = size
-        self.bar_padding = UIPosition(5, 0)
-        self.bar_fill_margin = UIPosition(5, 5)
+        self._size = radius
+        self.bar_padding = bar_padding
+        self.bar_fill_margin = bar_fill_margin
 
     def render_bar(self,
                    value: int,
@@ -43,10 +43,10 @@ class InTileUnitInfo(BaseUI):
 
         multiplier = 1 if direction == HexDirections.WEST else -1
 
-        pos = get_tile_point_position(ActualPosition(self.center_position.x,
-                                                     self.center_position.y,),
+        pos = get_hex_vertex_position(ActualPosition(self.center_position.x,
+                                                     self.center_position.y, ),
                                       self._size,
-                                      direction,)
+                                      direction, )
         bar_width = 20
         empty_bar_rect = [pos.x + (multiplier * self.bar_padding.x),                        # (좌측 바 기준) 좌측 상단 x
                           pos.y + self._size + self.bar_padding.y,                          # (좌측 바 기준) 좌측 상단 y
@@ -63,7 +63,7 @@ class InTileUnitInfo(BaseUI):
         pg.draw.rect(screen, color_empty, empty_bar_rect)
         pg.draw.rect(screen, color_filler, filler_rect)
 
-    def render_building_icon(self):
+    def render_building(self):
         pass
 
     def render_cost(self):
