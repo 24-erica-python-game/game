@@ -1,21 +1,18 @@
 {
-    "tile_definition": {
-        "field": {
-            "symbol": "#",
-            "movement_cost": 1
-        },
-        "hill": {
-            "symbol": "*",
-            "movement_cost": 2
-        },
-        "mountain": {
-            "symbol": "^",
-            "movement_cost": 4
-        }
+    "metadata": {
+        "display_name": "test map #1",
+        "map_size": 32
     },
     "map_data": [
-        "######^^^^##########",
-        "#########^#*****####",
-        "##############*#####"
+        {
+            "position": [0, 0],
+            "tile": "hill",
+            "structure": [],
+            "unit": {
+                "type": null,
+                "faction": 0,
+                "hp": 0
+            }
+        }
     ]
 }

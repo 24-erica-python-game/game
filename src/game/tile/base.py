@@ -1,10 +1,14 @@
 from abc import ABCMeta, abstractmethod
 from typing import Optional
+
 from unit.base import BaseUnit
 from tile.types import *
 
 
 class BaseTile: pass
+class BaseStructure: pass
+
+
 class BaseTile(metaclass=ABCMeta):
     """
     | https://www.redblobgames.com/grids/hexagons/
@@ -14,6 +18,10 @@ class BaseTile(metaclass=ABCMeta):
     @property
     def placed_unit(self) -> Optional[BaseUnit]:
         return self.placed_unit
+
+    @property
+    def placed_structure(self) -> Optional[BaseStructure]:
+        return self.placed_structure
 
     @property
     def defence_bonus(self) -> int:
@@ -27,13 +35,13 @@ class BaseTile(metaclass=ABCMeta):
         self.position = Position(q, r)
 
 
-    @abstractmethod
-    def on_arrived(self) -> None:
-        pass
-
     @placed_unit.setter
     def place_unit(self, unit: BaseUnit) -> None:
         self.placed_unit = unit
+
+    @placed_structure.setter
+    def construct_structure(self, structure: BaseStructure) -> None:
+        self.placed_structure = structure
 
     def get_distance(self, opposite: BaseTile) -> float:
         vec: Position = self.position - opposite.position
@@ -55,6 +63,12 @@ class BaseTile(metaclass=ABCMeta):
         # TileMeta.get_path() 에서 경로 계산 결과 반환 
         # UnitMeta.move() 에서 결과 값을 토대로 이동
     
+
+class BaseStructure(metaclass=ABCMeta):
+    @abstractmethod
+    def on_arrived(self, base_tile: BaseTile) -> None:
+        pass
+
 
 class BaseTileMap:
     """

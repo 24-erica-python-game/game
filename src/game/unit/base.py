@@ -46,6 +46,13 @@ class BaseUnit(ABCMeta):
     def cost(self) -> int:
         return self.cost
 
+    @property
+    def faction(self) -> int:
+        return self.faction
+    
+    def __init__(self, faction: int) -> None:
+        self.faction = faction
+
 
     @abstractmethod
     def _play_animation(self, anim_path: PathLike):

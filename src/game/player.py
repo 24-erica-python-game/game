@@ -9,5 +9,8 @@ class Player:
         self.ticket = ticket
         self.deck = deck
 
-    def place_unit(self, unit: BaseUnit, pos: Position):
+    def deploy_unit(self, unit: BaseUnit, pos: Position):
         pass
+
+    def surrender(self):
+        self.ticket = 0
