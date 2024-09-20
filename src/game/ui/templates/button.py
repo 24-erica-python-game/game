@@ -3,11 +3,12 @@ from typing import Optional
 import pygame as pg
 from pygame.font import FontType
 
-from src.game.ui.base import UIPosition, UISize
-from src.game.ui.color import RGB
+from game.ui.base import UIPosition, UISize
+from game.ui.color import RGB
+from game.ui.templates.interactable import Interactable
 
 
-class Button:
+class Button(Interactable):
     """
     버튼 템플릿 클래스
 
@@ -20,6 +21,7 @@ class Button:
                  size: UISize,
                  foreground: RGB,
                  background: RGB):
+        super().__init__(pos, size)
         self.label = label
         self.font = label_font
         self.pos = pos
@@ -89,11 +91,6 @@ class Button:
         display.blit(text,
                      (self.pos[0] + (self.size[0] / 2) - (text_size[0] / 2),
                       self.pos[1] + (self.size[1] / 2) - (text_size[1] / 2)))
-
-    def is_mouse_in_area(self):
-        mouse_x, mouse_y = pg.mouse.get_pos()
-        return self.pos.x <= mouse_x <= self.pos.x + self.size.x and \
-               self.pos.y <= mouse_y <= self.pos.y + self.size.y
 
     def on_clicked(self):
         raise NotImplementedError

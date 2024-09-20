@@ -32,6 +32,7 @@ class ButtonTest(Button):
 
     def on_clicked(self):
         self.set_pos(UIPosition(-1, self.pos.y - 1))
+        self.set_label(f"pos: ({self.pos.x}, {self.pos.y})")
         print("button clicked")
 
 
