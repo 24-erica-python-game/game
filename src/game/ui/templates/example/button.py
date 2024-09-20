@@ -31,15 +31,16 @@ class ButtonTest(Button):
         super().__init__(label, label_font, pos, size, foreground, background)
 
     def on_clicked(self):
+        self.set_pos(UIPosition(-1, self.pos.y - 1))
         print("button clicked")
 
 
+button = ButtonTest("button_label", small_font, UIPosition(100, 143), UISize(200, 14), RGB(0, 0, 0), RGB(199, 199, 199))
+
 while running:
     screen.fill(Color.WHITE)
-
     clock.tick(30)
 
-    button = ButtonTest("button_label", small_font, UIPosition(100, 143), UISize(200, 14), RGB(0, 0, 0), RGB(199, 199, 199))
     button.render()
 
     for event in pg.event.get():
