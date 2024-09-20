@@ -13,26 +13,6 @@ class UISize(NamedTuple):
     y: float
 
 
-class RGB(NamedTuple):
-    r: int
-    g: int
-    b: int
-
-
-class RGBA(NamedTuple):
-    r: int
-    g: int
-    b: int
-    a: int
-
-
-def to_rgba(color: RGB) -> RGBA:
-    return RGBA(color.r, color.g, color.b, 0)
-
-def to_rgb(color: RGBA) -> RGB:
-    return RGB(color.r, color.g, color.b)
-
-
 class BaseUI:
     @property
     def position(self) -> UIPosition:
