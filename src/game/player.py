@@ -1,5 +1,5 @@
-from unit.base import BaseUnit
-from tile.types import Position
+from game.unit.base import BaseUnit
+from game.tile.types import Position
 from game.deck import Deck
 
 

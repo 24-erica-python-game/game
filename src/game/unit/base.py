@@ -3,7 +3,7 @@ from os import PathLike
 from enum import IntEnum
 from dataclasses import dataclass
 
-from tile.types import Position
+from game.tile.types import Position
 
 class AnimationState(IntEnum):
     """
@@ -49,9 +49,15 @@ class BaseUnit(ABCMeta):
     @property
     def faction(self) -> int:
         return self.faction
+
+    @property
+    def hp(self) -> int:
+        return self.hp
     
-    def __init__(self, faction: int) -> None:
+    def __init__(self, x: int, y: int, faction: int, hp: int=100) -> None:
+        self.position = Position(x, y)
         self.faction = faction
+        self.hp = hp
 
 
     @abstractmethod

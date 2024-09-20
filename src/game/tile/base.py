@@ -1,8 +1,8 @@
 from abc import ABCMeta, abstractmethod
-from typing import Optional
+from typing import Any, Optional
 
-from unit.base import BaseUnit
-from tile.types import *
+from game.unit.base import BaseUnit
+from game.tile.types import *
 
 
 class BaseTile: pass
@@ -50,6 +50,10 @@ class BaseTile(metaclass=ABCMeta):
             abs(vec.r) +
             abs(vec.q  + vec.r)) / 2)
 
+    def on_unit_arrived(self) -> Any:
+        if self.placed_structure is not None:
+            self.placed_structure.on_arrived(self)
+
     @abstractmethod
     def get_neighbors(self) -> list[AxialCoordinates]:
         pass
@@ -62,9 +66,13 @@ class BaseTile(metaclass=ABCMeta):
         # 경로 탐색 구현
         # TileMeta.get_path() 에서 경로 계산 결과 반환 
         # UnitMeta.move() 에서 결과 값을 토대로 이동
+        pass
     
 
 class BaseStructure(metaclass=ABCMeta):
+    def __init__(self, faction: int) -> None:
+        self.faction = faction
+
     @abstractmethod
     def on_arrived(self, base_tile: BaseTile) -> None:
         pass

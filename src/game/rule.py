@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from types import FunctionType
 from typing import Optional
 
-from deck import Deck
+from game.deck import Deck
 from game import command
 from game.player import Player
 
