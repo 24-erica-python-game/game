@@ -2,17 +2,17 @@ from typing import Literal
 
 import pygame as pg
 
-from src.game.ui.base import BaseUI, UIPosition
+from src.game.ui.base import BaseUI, FloatUIPosition
 from src.game.tile.types import ActualPosition, get_hex_vertex_position, HexDirections
 from src.game.ui.color import Color
 
 
 class InTileUnitInfo(BaseUI):
     def __init__(self,
-                 center_position: UIPosition,
+                 center_position: FloatUIPosition,
                  radius: float,
-                 bar_padding: UIPosition,
-                 bar_fill_margin: UIPosition,):
+                 bar_padding: FloatUIPosition,
+                 bar_fill_margin: FloatUIPosition, ):
         """
         :param center_position: 타일의 중점의 위치
         :param radius: 타일의 한 모서리의 크기

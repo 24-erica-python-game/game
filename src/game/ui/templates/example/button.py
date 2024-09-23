@@ -1,6 +1,6 @@
 import pygame as pg
 
-from game.ui.base import UIPosition, UISize
+from game.ui.base import FloatUIPosition, FloatUISize
 from game.ui.color import Color, RGB
 from game.ui.templates.button import Button
 
@@ -24,19 +24,19 @@ class ButtonTest(Button):
     def __init__(self,
                  label: str,
                  label_font: pg.font.FontType,
-                 pos: UIPosition,
-                 size: UISize,
+                 pos: FloatUIPosition,
+                 size: FloatUISize,
                  foreground: RGB,
                  background: RGB):
         super().__init__(label, label_font, pos, size, foreground, background)
 
     def on_clicked(self):
-        self.set_pos(UIPosition(-1, self.pos.y - 1))
+        self.set_pos(FloatUIPosition(-1, self.pos.y - 1))
         self.set_label(f"pos: ({self.pos.x}, {self.pos.y})")
         print("button clicked")
 
 
-button = ButtonTest("button_label", small_font, UIPosition(100, 143), UISize(200, 14), RGB(0, 0, 0), RGB(199, 199, 199))
+button = ButtonTest("button_label", small_font, FloatUIPosition(100, 143), FloatUISize(200, 14), RGB(0, 0, 0), RGB(199, 199, 199))
 
 while running:
     screen.fill(Color.WHITE)

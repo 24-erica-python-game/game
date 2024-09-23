@@ -1,12 +1,12 @@
 from typing import Literal
 
-from game.ui.base import UIPosition, UISize
+from game.ui.base import FloatUIPosition, FloatUISize
 from game.ui.color import RGBA
 from game.ui.templates.interactable import Interactable
 
 
 class SliderHead(Interactable):
-    def __init__(self, pos: UIPosition, size: UISize):
+    def __init__(self, pos: FloatUIPosition, size: FloatUISize):
         super().__init__(pos, size)
 
 
@@ -15,12 +15,12 @@ class Slider[T: int | float]:
                  value_range: tuple[T, T, T],
                  default_value: T,
                  head_type: Literal["bar", "triangle", "inv_triangle", "circle"],
-                 head_size: UISize,
+                 head_size: FloatUISize,
                  head_color: RGBA,
-                 pos: UIPosition,
-                 size: UISize,
+                 pos: FloatUIPosition,
+                 size: FloatUISize,
                  color: RGBA,
-                 interpolation=None,):
+                 interpolation=None, ):
         """
         슬라이더 객체를 생성함, 헤드를 클릭한 상태로 드래그해 값을 조정함
         :param value_range: (min, max, multiplier)로 구성됨. 세 값은 모두 int 또는 float형이면서 세 값의 타입이 서로 같아야 함.

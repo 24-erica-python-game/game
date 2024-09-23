@@ -1,13 +1,13 @@
 import pygame as pg
 
-from game.ui.base import UIPosition, UISize
+from game.ui.base import FloatUIPosition, FloatUISize
 
 
 class Interactable:
     """
     마우스가 영역 안에 있는지를 검사할 수 있는 함수를 제공하는 클래스
     """
-    def __init__(self, pos: UIPosition, size: UISize):
+    def __init__(self, pos: FloatUIPosition, size: FloatUISize):
         self.pos = pos
         self.size = size
 
