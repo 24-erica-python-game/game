@@ -2,9 +2,9 @@ from dataclasses import dataclass
 from types import FunctionType
 from typing import Optional
 
-from game.deck import Deck
-from game import command
-from game.player import Player
+from src.game.command import commands
+from src.game.deck import Deck
+from src.game.player import Player
 
 
 @dataclass
@@ -18,7 +18,7 @@ class GameSystem:
     def __init__(self, ruleset: GameRule) -> None:
         self.players = [ Player(f"P{i+1}", ruleset.start_ticket, Deck()) for i in range(2) ]
         self.current_turn = 0
-        self.callable_commands: dict[str, FunctionType] = command.commands
+        self.callable_commands: dict[str, FunctionType] = commands
 
     def switch_turn(self) -> int:
         self.current_turn = (self.current_turn + 1) % len(self.players)

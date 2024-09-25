@@ -1,11 +1,11 @@
 import pygame as pg
 
-from src.game.ui.base import UI, UIPosition, UISize
-from src.utils.config import Config
+from src.game.ui.base import BaseUI, UIPosition, UISize
 from src.game.ui.color import Color
+from src.utils.config import Config
 
 
-class GameInfo(UI):
+class GameInfo(BaseUI):
     def __init__(self):
         self.enemy_unit = None
         self.player_unit = None

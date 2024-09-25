@@ -6,7 +6,8 @@ from game.unit.unit import *
 from utils.config import Config
 
 from queue import PriorityQueue
-import json
+
+from src.game.tile.base import *
 
 
 class CommonTile(BaseTile):       pass
