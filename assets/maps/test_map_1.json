@@ -1,15 +1,17 @@
 {
     "metadata": {
         "display_name": "test map #1",
-        "map_size": [20, 30]
+        "map_size": 32
     },
     "map_data": [
         {
             "position": [0, 0],
-            "tile_type": "hill",
-            "movement_cost": 2,
-            "structure_list": [],
-            "placed_unit": {
+            "tile": "hill",
+            "structure": {
+                "type": null,
+                "faction": 0
+            },
+            "unit": {
                 "type": null,
                 "faction": 0,
                 "hp": 0

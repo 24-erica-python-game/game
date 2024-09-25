@@ -1,6 +1,6 @@
 import pygame as pg
 
-from src.baseclasses.ui.ui import UI
+from src.game.ui.base import UI
 from src.utils.config import Config
 
 

@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from types import FunctionType
+from typing import Optional
 
-from game import Deck
+from game.deck import Deck
 from game import command
 from game.player import Player
 
@@ -27,3 +28,20 @@ class GameSystem:
             self.callable_commands[cmd_name](*args)
         except TypeError:
             self.callable_commands[cmd_name]()
+
+    def check_win_condition(self) -> Optional[Player]:
+        """
+        남은 플레이어가 1명뿐이라면 남은 플레이어를 반환하고, 아닐 경우 `None` 반환
+        """
+        return None if len(self.players) == 1 else self.players[0]
+
+    def check_all_players_tickets(self) -> None:
+        """
+        | 현재 게임중인 플레이어들의 티켓을 검사하고,
+        | 티켓이 0 이하로 떨어질 경우 게임에서 제거함.
+        """
+        players = self.players.copy()
+
+        for player in players:
+            if player.ticket <= 0:  # if not player.ticket으로 쓸 수 있지만 비직관적이어서 이 조건으로 둠.
+                self.players.remove(player)

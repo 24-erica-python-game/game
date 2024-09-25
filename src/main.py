@@ -1,6 +1,6 @@
 import pygame as pg
 
-from game.tile import TileMap
+from game.tile.tile import TileMap
 
 pg.init() #게임 엔진 초기화
 
@@ -89,3 +89,19 @@ while running:
     screen.blit(player_power_info, (1100,750))
 
     pg.display.flip() #pygame의 메인 루프 끝에 반드시 사용
+print(pg.font.get_fonts())
+
+
+class Game:
+    def __init__(self, map_name: str):
+        self.tile_map = TileMap(map_name)
+
+    def main_loop(self):
+        while True:
+            pass
+
+    def draw_ui(self):
+        pass
+
+    def handle_input(self):
+        pass

@@ -1,8 +1,29 @@
 from abc import ABCMeta, abstractmethod
 from os import PathLike
-from baseclasses.types import *
+from enum import IntEnum
 from dataclasses import dataclass
 
+from game.tile.types import Position
+
+class AnimationState(IntEnum):
+    """
+    IDLE
+        기본 상태 (아무런 행동도 없을 경우)
+
+    MOVE
+        이동 시 애니메이션
+
+    ATTACK
+        공격 시 애니메이션
+
+    DEFEND
+        방어 시 애니메이션
+    """
+    IDLE = 0
+    MOVE = 1
+    ATTACK = 2
+    DEFEND = 3
+    
 
 class BaseUnit(ABCMeta):
     @property
@@ -24,6 +45,19 @@ class BaseUnit(ABCMeta):
     @property
     def cost(self) -> int:
         return self.cost
+
+    @property
+    def faction(self) -> int:
+        return self.faction
+
+    @property
+    def hp(self) -> int:
+        return self.hp
+    
+    def __init__(self, x: int, y: int, faction: int, hp: int=100) -> None:
+        self.position = Position(x, y)
+        self.faction = faction
+        self.hp = hp
 
 
     @abstractmethod

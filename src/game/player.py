@@ -1,4 +1,5 @@
-from baseclasses import Position, BaseUnit
+from game.unit.base import BaseUnit
+from game.tile.types import Position
 from game.deck import Deck
 
 
@@ -8,5 +9,8 @@ class Player:
         self.ticket = ticket
         self.deck = deck
 
-    def place_unit(self, unit: BaseUnit, pos: Position):
+    def deploy_unit(self, unit: BaseUnit, pos: Position):
         pass
+
+    def surrender(self):
+        self.ticket = 0
