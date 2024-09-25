@@ -1,13 +1,13 @@
 from pygame.font import FontType
 
-from game.ui.base import FloatUIPosition, FloatUISize
+from game.ui.base import UIPosition, UISize
 from game.ui.color import RGB
 from game.ui.templates.interactable import Interactable
 from game.ui.templates.slider import Scrollbar
 
 
 class DropdownItem(Interactable):
-    def __init__(self, pos: FloatUIPosition, size: FloatUISize):
+    def __init__(self, pos: UIPosition, size: UISize):
         super().__init__(pos, size)
 
 
@@ -16,10 +16,10 @@ class Dropdown[T](Interactable):
                  items: list[T],
                  default_idx: int,
                  font: FontType,
-                 max_size: FloatUISize,
+                 max_size: UISize,
                  scrollbar: Scrollbar | None,
-                 pos: FloatUIPosition,
-                 size: FloatUISize,
+                 pos: UIPosition,
+                 size: UISize,
                  background: RGB):
         """
         드롭다운 메뉴 객체를 생성함

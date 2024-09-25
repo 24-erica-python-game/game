@@ -1,5 +1,5 @@
-from typing import NamedTuple, overload
 from enum import IntEnum
+from typing import NamedTuple
 
 from pygame.font import Font
 
@@ -12,65 +12,31 @@ class UIAlignment(IntEnum):
     bottom = 4
 
 
-class FloatUIPosition(NamedTuple):
-    x: float
-    y: float
+class UIPosition[T: int | float](NamedTuple):
+    x: T
+    y: T
 
 
-class IntUIPosition(NamedTuple):
-    x: int
-    y: int
-
-
-class FloatUISize(NamedTuple):
-    x: float
-    y: float
-
-
-class IntUISize(NamedTuple):
-    x: int
-    y: int
-
-
-@overload
-def convert(t: FloatUIPosition) -> IntUIPosition: ...
-
-@overload
-def convert(t: IntUIPosition) -> FloatUIPosition: ...
-
-@overload
-def convert(t: FloatUISize) -> IntUISize: ...
-
-@overload
-def convert(t: IntUISize) -> FloatUISize: ...
-
-
-def convert(t):
-    if isinstance(t, FloatUIPosition):
-        return IntUIPosition(int(t.x), int(t.y))
-    elif isinstance(t, IntUIPosition):
-        return FloatUIPosition(float(t.x), float(t.y))
-    elif isinstance(t, FloatUISize):
-        return IntUISize(int(t.x), int(t.y))
-    elif isinstance(t, IntUISize):
-        return FloatUISize(int(t.x), int(t.y))
+class UISize[T: int | float](NamedTuple):
+    x: T
+    y: T
 
 
 class BaseUI:
     @property
-    def position(self) -> FloatUIPosition:
+    def position(self) -> UIPosition:
         return self.position
 
     @position.setter
-    def position(self, position: FloatUIPosition):
+    def position(self, position: UIPosition):
         self.position = position
 
     @property
-    def size(self) -> FloatUISize:
+    def size(self) -> UISize:
         return self.size
 
     @size.setter
-    def size(self, size: FloatUISize):
+    def size(self, size: UISize):
         self.size = size
 
     @property

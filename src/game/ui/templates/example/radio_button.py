@@ -1,6 +1,6 @@
 import pygame as pg
 
-from game.ui.base import FloatUIPosition, UIAlignment
+from game.ui.base import UIPosition, UIAlignment
 from game.ui.color import Color, RGB
 from game.ui.templates.radio_button import RadioButtonGroup, RadioButton
 
@@ -26,9 +26,9 @@ radio_group = RadioButtonGroup(font=small_font,
                                default_active_id='radio_button_1',
                                button_color=RGB(77, 77, 77),
                                active_color=RGB(35, 188, 35))
-radio_button_1 = RadioButton(radio_group, "테스트", FloatUIPosition(500, 100), 6.5, 'radio_button_1')
-radio_button_2 = RadioButton(radio_group, "label_pos와 label_alignment 값을 변경해", FloatUIPosition(500, 120), 6.5, 'radio_button_2')
-radio_button_3 = RadioButton(radio_group, "레이블 위치를 변경 가능하다", FloatUIPosition(500, 140), 6.5, 'radio_button_3')
+radio_button_1 = RadioButton(radio_group, "테스트", UIPosition(500, 100), 6.5, 'radio_button_1')
+radio_button_2 = RadioButton(radio_group, "label_pos와 label_alignment 값을 변경해", UIPosition(500, 120), 6.5, 'radio_button_2')
+radio_button_3 = RadioButton(radio_group, "레이블 위치를 변경 가능하다", UIPosition(500, 140), 6.5, 'radio_button_3')
 
 
 while running:

@@ -1,6 +1,6 @@
 import pygame as pg
 
-from src.game.ui.base import BaseUI, FloatUIPosition, FloatUISize
+from src.game.ui.base import BaseUI, UIPosition, UISize
 from src.game.ui.color import Color
 from src.utils.config import Config
 
@@ -14,8 +14,8 @@ class GameInfo(BaseUI):
 
         self.font = pg.font.SysFont(Config.get_config("font.default_font"),
                                     Config.get_config("font.default_size"))
-        self.position = FloatUIPosition(640, 10)
-        self.size = FloatUISize(1280, 50)
+        self.position = UIPosition(640, 10)
+        self.size = UISize(1280, 50)
 
         self.rect = (self.position.x, self.position.y,
                      self.size.x,     self.size.y)

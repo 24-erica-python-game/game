@@ -3,7 +3,7 @@ from pygame.rect import RectType, Rect
 
 from src.game.tile.base import BaseTileMap
 from src.game.tile.types import HexDirections, get_hex_vertex_position, ActualPosition
-from src.game.ui.base import BaseUI, FloatUISize
+from src.game.ui.base import BaseUI, UISize
 from src.game.ui.color import Color
 from src.utils.config import Config
 
@@ -37,7 +37,7 @@ class Minimap(BaseUI):
     def render(self, map_data: list):
         # TODO: 테스트 필요함
         w, h = pg.display.get_window_size()
-        minimap_size = FloatUISize(int(w * (1 / 4)), int(h * (1 / 4)))
+        minimap_size = UISize(int(w * (1 / 4)), int(h * (1 / 4)))
         minimap = pg.Surface((minimap_size.x, minimap_size.y))
         for l_coordinates in self.__get_regularized_coordinates():
             for coordinates in l_coordinates:

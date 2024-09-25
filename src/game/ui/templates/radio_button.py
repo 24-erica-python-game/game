@@ -4,10 +4,10 @@ import pygame as pg
 from pygame import gfxdraw as gfx
 from pygame.font import FontType
 
-from game.ui.base import FloatUIPosition, FloatUISize, convert, IntUISize, UIAlignment
+from game.ui.base import UIPosition, UISize, convert, UISize, UIAlignment
 from game.ui.color import RGB
 from game.ui.templates.interactable import Interactable
-from game.ui.templates.textbox import Textbox
+from game.ui.templates.textbox import TextBox
 
 t_button_id = TypeVar('t_button_id')
 
@@ -57,17 +57,17 @@ class RadioButtonGroup:
     def get_current_active(self) -> t_button_id:
         return self.active_id
 
-    def get_longest_text_size(self) -> IntUISize:
+    def get_longest_text_size(self) -> UISize:
         longest = max([self.font.render(button.label, True, self.label_color).get_size()
                        for button in self.buttons])
-        return IntUISize(longest[0], longest[1])
+        return UISize(longest[0], longest[1])
 
 
 class RadioButton(Interactable):
     def __init__(self,
                  group: RadioButtonGroup,
                  label: str,
-                 pos: FloatUIPosition,
+                 pos: UIPosition,
                  radius: float,
                  button_id: t_button_id):
         """
@@ -78,16 +78,16 @@ class RadioButton(Interactable):
         :param radius: 버튼의 반지름
         :param button_id: 버튼의 ID
         """
-        super().__init__(FloatUIPosition(pos.x - radius, pos.y - radius),
-                         FloatUISize(radius * 2, radius * 2))
+        super().__init__(UIPosition(pos.x - radius, pos.y - radius),
+                         UISize(radius * 2, radius * 2))
         self.group = group
         self.label = label
         self.pos = pos
         self.radius = radius
         self.button_id = button_id
 
-        self.tst_pos = FloatUIPosition(pos.x - radius, pos.y - radius)
-        self.tst_size = FloatUISize(radius * 2, radius * 2)
+        self.tst_pos = UIPosition(pos.x - radius, pos.y - radius)
+        self.tst_size = UISize(radius * 2, radius * 2)
 
         group.buttons.append(self)
 
@@ -109,7 +109,7 @@ class RadioButton(Interactable):
 
         label = self.group.font.render(self.label, True, self.group.label_color)
         longest_text_size = self.group.get_longest_text_size()
-        text_size = IntUISize(label.get_size()[0], label.get_size()[1])
+        text_size = UISize(label.get_size()[0], label.get_size()[1])
         textbox_pos_x = 0
 
         match self.group.label_pos:
@@ -118,7 +118,7 @@ class RadioButton(Interactable):
             case UIAlignment.right:
                 textbox_pos_x = pos.x + self.group.label_distance
 
-        textbox = Textbox(FloatUIPosition(textbox_pos_x, pos.y - text_size.y / 2),
+        textbox = TextBox(UIPosition(textbox_pos_x, pos.y - text_size.y / 2),
                           convert(longest_text_size),
                           self.group.font,
                           self.label,

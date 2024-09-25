@@ -2,3 +2,4 @@ pygame
 geks
 dacite
 pytest
+numpy

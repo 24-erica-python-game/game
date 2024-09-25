@@ -1,8 +1,8 @@
 import pygame as pg
 
-from game.ui.base import FloatUIPosition, UIAlignment, FloatUISize
+from game.ui.base import UIPosition, UIAlignment, UISize
 from game.ui.color import Color, RGB
-from game.ui.templates.textbox import Textbox
+from game.ui.templates.textbox import TextBox
 
 pg.init()
 
@@ -18,20 +18,20 @@ pg.display.set_caption("Buggy Buddies")
 running = True
 clock = pg.time.Clock()
 
-textbox_aligned_left = Textbox(FloatUIPosition(540, 290),
-                               FloatUISize(200, 20),
+textbox_aligned_left = TextBox(UIPosition(540, 290),
+                               UISize(200, 20),
                                small_font,
                                "left",
                                RGB(0, 0, 0),
                                UIAlignment.left)
-textbox_aligned_center = Textbox(FloatUIPosition(540, 265),
-                                 FloatUISize(200, 20),
+textbox_aligned_center = TextBox(UIPosition(540, 265),
+                                 UISize(200, 20),
                                  small_font,
                                  "center",
                                  RGB(0, 0, 0),
                                  UIAlignment.center)
-textbox_aligned_right = Textbox(FloatUIPosition(540, 240),
-                                FloatUISize(200, 20),
+textbox_aligned_right = TextBox(UIPosition(540, 240),
+                                UISize(200, 20),
                                 small_font,
                                 "right",
                                 RGB(0, 0, 0),

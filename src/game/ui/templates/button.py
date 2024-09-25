@@ -3,7 +3,7 @@ from typing import Optional
 import pygame as pg
 from pygame.font import FontType
 
-from game.ui.base import FloatUIPosition, FloatUISize
+from game.ui.base import UIPosition, UISize
 from game.ui.color import RGB
 from game.ui.templates.interactable import Interactable
 
@@ -17,8 +17,8 @@ class Button(Interactable):
     def __init__(self,
                  label: str,
                  label_font: pg.font.FontType,
-                 pos: FloatUIPosition,
-                 size: FloatUISize,
+                 pos: UIPosition,
+                 size: UISize,
                  foreground: RGB,
                  background: RGB):
         super().__init__(pos, size)
@@ -41,7 +41,7 @@ class Button(Interactable):
         if background is not None:
             self.background = background
 
-    def set_size(self, size: FloatUISize):
+    def set_size(self, size: UISize):
         """
         버튼의 크기를 결정함
         :param size: 변경할 크기, 만약 x 또는 y값이 -1일 경우 그 값은 변경하지 않음.
@@ -52,9 +52,9 @@ class Button(Interactable):
             x = size.x
         if size.y != -1:
             y = size.y
-        self.size = FloatUISize(x, y)
+        self.size = UISize(x, y)
 
-    def set_pos(self, pos: FloatUIPosition):
+    def set_pos(self, pos: UIPosition):
         """
         버튼의 위치를 결정함
         :param pos: 변경할 위치, 만약 x 또는 y값이 -1일 경우 그 값은 변경하지 않음.
@@ -65,7 +65,7 @@ class Button(Interactable):
             x = pos.x
         if pos.y != -1:
             y = pos.y
-        self.pos = FloatUIPosition(x, y)
+        self.pos = UIPosition(x, y)
 
     def set_label(self, label: str):
         """

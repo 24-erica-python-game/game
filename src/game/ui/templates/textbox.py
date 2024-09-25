@@ -3,15 +3,15 @@ from typing import Literal
 import pygame as pg
 from pygame.font import FontType
 
-from game.ui.base import FloatUIPosition, FloatUISize, UIAlignment, IntUISize, convert
+from game.ui.base import UIPosition, UISize, UIAlignment, UISize
 from game.ui.color import RGB
 from game.ui.templates.interactable import Interactable
 
 
-class Textbox(Interactable):
+class TextBox(Interactable):
     def __init__(self,
-                 pos: FloatUIPosition,
-                 size: FloatUISize,
+                 pos: UIPosition,
+                 size: UISize,
                  font: FontType,
                  label: str,
                  color: RGB,
@@ -35,9 +35,9 @@ class Textbox(Interactable):
 
     def render(self):
         display = pg.display.get_surface()
-        pos = convert(self.pos)
+        pos = self.pos
         text = self.font.render(self.label, True, self.color)
-        text_size = IntUISize(text.get_size()[0], text.get_size()[1])
+        text_size = UISize(text.get_size()[0], text.get_size()[1])
         label_pos_x = 0
 
         # DEBUG: 텍스트박스 영역 표시
