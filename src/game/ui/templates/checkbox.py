@@ -37,3 +37,14 @@ class CheckBox(Interactable):
                     pg.draw.aaline(display, self.active_color,
                                    (self.pos.x + 2, self.pos.y + self.size.y - 3),
                                    (self.pos.x + self.size.x - 3, self.pos.y + 2))
+
+    def toggle_state(self) -> bool:
+        """
+        체크박스의 상태를 바꿔 다시 렌더링한 뒤, 바뀐 상태를 반환한다.
+
+        :return: 체크박스의 최종 상태
+        """
+        self.state = not self.state
+        self.render()
+
+        return self.state

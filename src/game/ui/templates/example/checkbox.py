@@ -30,7 +30,7 @@ while running:
             case pg.QUIT:
                 running = False
             case pg.MOUSEBUTTONDOWN if checkbox.is_mouse_in_area():
-                checkbox.state = not checkbox.state
+                checkbox.toggle_state()
 
     checkbox.render()
 
