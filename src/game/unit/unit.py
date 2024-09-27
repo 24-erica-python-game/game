@@ -21,13 +21,7 @@ from game.tile.types import Position
 #         self.hp = hp
 #         self.supply_reserve = supply_reserve
 #
-#         self.animations = {
-#             "test_sprite_1": {
-#                 "path": "path_to_sprites",
-#                 "data": [],
-#                 "state": AnimationState.IDLE,
-#             },
-#         }
+#         self.animations = []
 #         self.load_animations()
 
 

@@ -45,11 +45,11 @@ class BaseUnit(metaclass=ABCMeta):
         self.__anim_state = anim_state
 
     @property
-    def animations(self) -> dict[str, list[bytes]]:
+    def animations(self) -> list[dict[str, bytes | str] | None]:
         return self.__animations
 
     @animations.setter
-    def animations(self, animations: dict[str, list[bytes]]):
+    def animations(self, animations: list[dict[str, bytes | str] | None]):
         self.__animations = animations
 
     @property
@@ -110,7 +110,7 @@ class BaseUnit(metaclass=ABCMeta):
                  hp: int = 100,
                  supply_reserve: int = 100):
         self.anim_state = AnimationState.IDLE
-        self.animations = dict()
+        self.animations = [None, None, None, None]
         self.action_cost = action_cost
         self.position = Position(x, y)
         self.supply_reserve = supply_reserve
@@ -123,17 +123,34 @@ class BaseUnit(metaclass=ABCMeta):
     def _play_animation(self, anim_path: PathLike):
         pass
 
-    def __load_animation(self, parent_dir: PathLike, anim_name: str):
-        image_dir = sorted([int(filename[:-4]) for filename in os.listdir(parent_dir)])
-        for name in image_dir:
-            with open(f"{parent_dir}/{name}.png", 'rb') as f:
-                self.animations[anim_name].append(f.read())
-                print(f"    {anim_name}: loaded image: {name}.png")
-        print(f"animation {anim_name} loaded")
+    def __load_animation(self, parent_dir: PathLike, anim_type: str | AnimationState) -> None:
+        """
+        | **Animation Directory Hierarchy:**
+        | animations/
+        | ├── attack.webp
+        | ├── defend.webp
+        | ├── idle.webp
+        | └── move.webp
 
-    def load_animations(self):
-        for (anim_name, list_path) in self.animations.items():
-            thread = threading.Thread(target=self.__load_animation, args=(list_path, anim_name))
+        :param parent_dir: 애니메이션 파일이 있는 디렉토리
+        :param anim_type: 로드할 애니메이션
+        """
+
+        # TODO: 테스트 필요
+        anim_type = anim_type if isinstance(anim_type, str) else anim_type.name.lower()
+
+        if anim_type.upper() not in AnimationState.__members__:
+            raise ValueError(f"Invalid animation type: {anim_type}")
+
+        with open(f"{parent_dir}/{anim_type}.webp", "rb") as f:
+            self.animations[AnimationState[anim_type.upper()]] = {
+                "path": f"{parent_dir}/{anim_type}.webp",
+                "data": f.read()
+            }
+
+    def load_animations(self, animation_dir: PathLike):
+        for animation_type in AnimationState:
+            thread = threading.Thread(target=self.__load_animation, args=(animation_dir, animation_type.name.lower()))
             thread.start()
 
     def move(self, path: list[Position]) -> bool:
