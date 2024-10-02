@@ -4,7 +4,7 @@ import pygame as pg
 from pygame import gfxdraw as gfx
 from pygame.font import FontType
 
-from game.ui.base import UIPosition, UISize, convert, UISize, UIAlignment
+from game.ui.base import UIPosition, UISize, UIAlignment
 from game.ui.color import RGB
 from game.ui.templates.interactable import Interactable
 from game.ui.templates.textbox import TextBox
@@ -97,7 +97,7 @@ class RadioButton(Interactable):
 
     def render(self):
         display = pg.display.get_surface()
-        pos = convert(self.pos)
+        pos = self.pos
         gfx.aacircle(display,
                      pos.x,
                      pos.y,
@@ -119,7 +119,7 @@ class RadioButton(Interactable):
                 textbox_pos_x = pos.x + self.group.label_distance
 
         textbox = TextBox(UIPosition(textbox_pos_x, pos.y - text_size.y / 2),
-                          convert(longest_text_size),
+                          longest_text_size,
                           self.group.font,
                           self.label,
                           self.group.label_color,

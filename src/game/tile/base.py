@@ -1,10 +1,10 @@
 from abc import ABCMeta, abstractmethod
+from typing import Self
 
 from src.game.tile.types import *
 from src.game.unit.base import BaseUnit
 
 
-class BaseTile: pass
 class BaseTile(metaclass=ABCMeta):
     """
     | https://www.redblobgames.com/grids/hexagons/
@@ -44,7 +44,7 @@ class BaseTile(metaclass=ABCMeta):
     def place_unit(self, unit: BaseUnit) -> None:
         self.placed_unit = unit
 
-    def get_distance(self, opposite: BaseTile) -> float:
+    def get_distance(self, opposite: Self) -> float:
         vec: Position = self.position - opposite.position
         return Distance((
             abs(vec.q) +

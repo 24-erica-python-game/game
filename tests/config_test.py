@@ -1,4 +1,4 @@
-from src.utils.config import Config, Font
+from utils.config import Config, Font
 from dacite import from_dict
 
 
