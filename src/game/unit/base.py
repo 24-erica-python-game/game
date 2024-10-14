@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from enum import IntEnum
 from os import PathLike
 
-from game.tile.types import Position
+from src.game.tile.types import Position
 
 
 class AnimationState(IntEnum):
@@ -127,10 +127,10 @@ class BaseUnit(metaclass=ABCMeta):
         """
         | **Animation Directory Hierarchy:**
         | animations/
-        | ├── attack.webp
-        | ├── defend.webp
-        | ├── idle.webp
-        | └── move.webp
+        | ├─ attack.webp
+        | ├─ defend.webp
+        | ├─ idle.webp
+        | └─ move.webp
 
         :param parent_dir: 애니메이션 파일이 있는 디렉토리
         :param anim_type: 로드할 애니메이션
@@ -168,6 +168,9 @@ class BaseUnit(metaclass=ABCMeta):
 
 
 class BaseSupplyUnit(BaseUnit):
+    def _play_animation(self, anim_path: PathLike):
+        pass
+
     def __init__(self, position: Position):
         pass
 
