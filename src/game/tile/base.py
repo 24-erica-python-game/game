@@ -7,7 +7,7 @@ from src.game.unit.base import BaseUnit
 from src.game.tile.types import *
 
 if TYPE_CHECKING:
-    from . import BaseTile
+    from game.tile.base import BaseTile
 
 
 class BaseStructure(metaclass=ABCMeta):
@@ -15,7 +15,13 @@ class BaseStructure(metaclass=ABCMeta):
         self.faction = faction
 
     @abstractmethod
-    def on_arrived(self, base_tile: BaseTile) -> None:
+    def on_arrived(self, base_tile: BaseTile) -> Any:
+        """
+        유닛이 도착했을 때 호출되어야 하는 메서드
+
+        :param base_tile:
+        :return: 상속된 구조물 클래스에서 구현한 메서드의 반환값
+        """
         pass
 
 
@@ -50,16 +56,38 @@ class BaseTile(metaclass=ABCMeta):
         self.placed_structure = structure
 
     def on_unit_arrived(self) -> Any:
+        """
+        유닛이 도착했을 때 유닛은 현재 타일의 이 메서드를 호출해야 함.
+
+        구조물이 있는 경우 구조물의 `on_arrived()` 메서드를 호출하게 됨, \n
+        따라서 상속된 타일 클래스에서 구조물의 `on_arrived()` 메서드를 호출하는 대신 `super().on_unit_arrived()` 구문을 추가하면 됨.
+
+        :return: 상속된 타일 클래스에서 구현한 메서드의 반환값
+        """
         if self.placed_structure is not None:
-            self.placed_structure.on_arrived(self)
+            return self.placed_structure.on_arrived(self)
 
     def place_unit(self, unit: BaseUnit) -> None:
+        """
+        타일에 유닛을 배치함
+        :param unit:
+        :return:
+        """
         self.placed_unit = unit
 
     def place_structure(self, structure: BaseStructure) -> None:
+        """
+        타일에 구조물을 배치함
+        :param structure:
+        :return:
+        """
         self.placed_structure = structure
 
     def get_neighbors(self) -> list[BaseTile]:
+        """
+        현재 타일의 이웃 타일 리스트 반환
+        :return: 유효한 이웃 타일 리스트
+        """
         map_data = GameSystem().map_data
 
         def is_valid_position(p: Position) -> bool:
@@ -76,7 +104,7 @@ class BaseTile(metaclass=ABCMeta):
 
     def get_path(self, b: Position) -> Optional[list[Position]]:
         """
-        a -> b로 이동하는 경로 리스트 반환, 없을 경우 `None` 반환
+        A 타일에서 B 타일로 이동하는 경로의 리스트 반환, 없을 경우 `None` 반환
         """
 
         # 경로 탐색 구현

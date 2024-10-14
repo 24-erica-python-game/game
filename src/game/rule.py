@@ -67,10 +67,12 @@ class GameSystem:
             if player.ticket <= 0:
                 self.players.remove(player)
 
-    def register_map(self, map_data: list[list[BaseTile]]) -> None:
+    def register_map(self, map_data: list[list[BaseTile]]) -> list[list[BaseTile]]:
         """
-        맵 데이터를 등록함.
+        맵 데이터를 등록하고 등록된 맵 데이터를 반환함.
         :param map_data: 맵 데이터
-        :return:
+        :return: 등록된 맵 데이터
         """
         self.map_data = map_data
+
+        return self.map_data
