@@ -7,26 +7,42 @@ from game.unit.unit import *
 
 from utils.config import Config
 
-from queue import PriorityQueue
 import json
 
 from src.game.tile.base import *
 
 
-class CommonTile(BaseTile, metaclass=ABCMeta):
-    pass
+class HillTile(BaseTile):
+    def __init__(self, q: int, r: int) -> None:
+        super().__init__(q, r, movement_cost=2, defence_bonus=1)
+
+    def __repr__(self) -> str:
+        return f"Tile({self.position.q}, {self.position.r})"
+
+    def on_unit_arrived(self) -> None:
+        pass
 
 
-class HillTile(CommonTile, metaclass=ABCMeta):
-    pass
+class FieldTile(BaseTile):
+    def __init__(self, q: int, r: int) -> None:
+        super().__init__(q, r, movement_cost=1, defence_bonus=0)
+
+    def __repr__(self) -> str:
+        return f"Tile({self.position.q}, {self.position.r})"
+
+    def on_unit_arrived(self) -> None:
+        pass
 
 
-class FieldTile(CommonTile, metaclass=ABCMeta):
-    pass
+class MountainTile(BaseTile):
+    def __init__(self, q: int, r: int) -> None:
+        super().__init__(q, r, movement_cost=4, defence_bonus=3)
 
+    def __repr__(self) -> str:
+        return f"Tile({self.position.q}, {self.position.r})"
 
-class MountainTile(CommonTile, metaclass=ABCMeta):
-    pass
+    def on_unit_arrived(self) -> None:
+        pass
 
 
 class TileMap:
@@ -36,7 +52,7 @@ class TileMap:
         map_data = raw_map_data["map_data"]
 
         parsed_map: list[list[BaseTile]] = [
-            [CommonTile(i, j) for j in range(metadata["map_size"])] \
+            [FieldTile(i, j) for j in range(metadata["map_size"])] \
             for i in range(metadata["map_size"])]
 
         for tile_mod in map_data:
@@ -74,17 +90,25 @@ class TileMap:
             try:
                 match (tile_mod["unit"]):
                     case "ant":
-                        tile.place_unit(Ant(x, y, tile_mod["unit"]["faction"],
-                                            tile_mod["unit"]["hp"], 0))
+                        tile.place_unit(
+                            Ant(x, y,
+                                tile_mod["unit"]["faction"],
+                                tile_mod["unit"]["hp"], 0))
                     case "stag_beetle":
-                        tile.place_unit(StagBeetle(x, y, tile_mod["unit"]["faction"],
-                                                   tile_mod["unit"]["hp"], 0))
+                        tile.place_unit(
+                            StagBeetle(x, y,
+                                       tile_mod["unit"]["faction"],
+                                       tile_mod["unit"]["hp"], 0))
                     case "bombardier_beetle":
-                        tile.place_unit(BombardierBeetle(x, y, tile_mod["unit"]["faction"],
-                                                         tile_mod["unit"]["hp"], 0))
+                        tile.place_unit(
+                            BombardierBeetle(x, y,
+                                             tile_mod["unit"]["faction"],
+                                             tile_mod["unit"]["hp"], 0))
                     case "aphid":
-                        tile.place_unit(Aphid(x, y, tile_mod["unit"]["faction"],
-                                              tile_mod["unit"]["hp"], 0))
+                        tile.place_unit(
+                            Aphid(x, y,
+                                  tile_mod["unit"]["faction"],
+                                  tile_mod["unit"]["hp"], 0))
             except KeyError:
                 pass
 
@@ -95,26 +119,3 @@ class TileMap:
             raw_map_data: dict = json.loads(file_stream.read())
 
             self.tile_map: list[list[BaseTile]] = self.__parse_map(raw_map_data)
-
-
-class CommonTile(BaseTile):
-    def __init__(self, q: int, r: int) -> None:
-        super().__init__(q, r)
-
-    def __repr__(self) -> str:
-        return f"Tile({self.position.q}, {self.position.r})"
-
-    def on_arrived(self) -> None:
-        pass
-
-
-class HillTile(CommonTile):
-    pass
-
-
-class FieldTile(CommonTile):
-    pass
-
-
-class MountainTile(CommonTile):
-    pass
