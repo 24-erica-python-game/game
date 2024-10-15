@@ -1,4 +1,5 @@
 pygame
+pygame-textinput
 geks
 dacite
 pytest

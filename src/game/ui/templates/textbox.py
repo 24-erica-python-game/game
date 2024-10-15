@@ -3,7 +3,7 @@ from typing import Literal
 import pygame as pg
 from pygame.font import FontType
 
-from game.ui.base import UIPosition, UISize, UIAlignment, UISize
+from game.ui.base import UIPosition, UIAlignment, UISize
 from game.ui.color import RGB
 from game.ui.templates.interactable import Interactable
 
@@ -52,3 +52,55 @@ class TextBox(Interactable):
                 label_pos_x = pos.x + (self.size[0] - text_size.x)
 
         display.blit(text, (label_pos_x, pos.y))
+
+
+if __name__ == "__main__":
+    from game.ui.color import Color
+
+    pg.init()
+
+    small_font = pg.font.SysFont("malgungothic", 14, False, False)
+
+    # 화면 크기 지정
+    size = (1280, 600)
+    screen = pg.display.set_mode(size)
+
+    pg.display.set_caption("Buggy Buddies")
+
+    # FPS 관련 설정
+    running = True
+    clock = pg.time.Clock()
+
+    textbox_aligned_left = TextBox(UIPosition(540, 290),
+                                   UISize(200, 20),
+                                   small_font,
+                                   "left",
+                                   RGB(0, 0, 0),
+                                   UIAlignment.left)
+    textbox_aligned_center = TextBox(UIPosition(540, 265),
+                                     UISize(200, 20),
+                                     small_font,
+                                     "center",
+                                     RGB(0, 0, 0),
+                                     UIAlignment.center)
+    textbox_aligned_right = TextBox(UIPosition(540, 240),
+                                    UISize(200, 20),
+                                    small_font,
+                                    "right",
+                                    RGB(0, 0, 0),
+                                    UIAlignment.right)
+
+    while running:
+        screen.fill(Color.WHITE)
+        clock.tick(30)
+
+        textbox_aligned_left.render()
+        textbox_aligned_center.render()
+        textbox_aligned_right.render()
+
+        for event in pg.event.get():
+            match event.type:
+                case pg.QUIT:
+                    running = False
+
+        pg.display.flip()

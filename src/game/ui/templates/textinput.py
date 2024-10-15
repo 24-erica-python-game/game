@@ -27,7 +27,7 @@ class TextInput(TextBox):
                  font: FontType,
                  default_str: str,
                  placeholder: Optional[str],
-                 pattern: str | InputPatternPreset,
+                 pattern: Optional[str | InputPatternPreset],
                  color: RGB,
                  alignment: Literal[UIAlignment.left, UIAlignment.center, UIAlignment.right],
                  return_type: type,
@@ -66,16 +66,9 @@ class TextInput(TextBox):
         display = pg.display.get_surface()
         pos = self.pos
         text = self.font.render(self.label, True, self.color)
-        text_size = UISize(text.get_size()[0], text.get_size()[1])
         label_pos_x = 0
 
-        match self.alignment:
-            case UIAlignment.left:
-                label_pos_x = pos.x
-            case UIAlignment.center:
-                label_pos_x = pos.x + (self.size[0] - text_size.x) / 2
-            case UIAlignment.right:
-                label_pos_x = pos.x + (self.size[0] - text_size.x)
+        super().render()
 
         if self.focused:
             self.focused_time += 1
@@ -87,3 +80,55 @@ class TextInput(TextBox):
                 text = self.font.render(self.placeholder, True, self.placeholder_color)
 
         display.blit(text, (label_pos_x, pos.y))
+
+
+if __name__ == "__main__":
+    import utils
+    from game.ui.color import Color
+    from utils.mouse import double_click
+
+    pg.init()
+
+    small_font = pg.font.SysFont("malgungothic", 14, False, False)
+
+    # 화면 크기 지정
+    size = (400, 300)
+    screen = pg.display.set_mode(size)
+
+    pg.display.set_caption("Buggy Buddies")
+
+    # FPS 관련 설정
+    running = True
+    clock = pg.time.Clock()
+
+    textinput = TextInput(UIPosition(170, 140),
+                          UISize(60, 20),
+                          small_font,
+                          "default_str",
+                          "placeholder",
+                          None,
+                          RGB(0, 0, 0),
+                          UIAlignment.left,
+                          object)
+
+    while running:
+        screen.fill(Color.WHITE)
+        clock.tick(60)
+        double_click()
+
+        for event in pg.event.get():
+            match event.type:
+                case pg.QUIT:
+                    running = False
+                case utils.mouse.event_double_clicked:
+                    if textinput.is_mouse_in_area():
+                        textinput.focused = True
+                        print("focused in")
+                case pg.MOUSEBUTTONDOWN:
+                    if not textinput.is_mouse_in_area():
+                        textinput.focused = False
+                        print("focused out")
+
+        textinput.render()
+
+        pg.display.flip()
