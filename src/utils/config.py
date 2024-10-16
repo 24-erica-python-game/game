@@ -2,7 +2,7 @@ import json
 from dataclasses import dataclass
 from enum import Enum
 from typing import Optional
-
+import pygame as pg
 
 _config_path = "config.json"  # TODO: 경로를 지정해야 함.
 
@@ -13,14 +13,42 @@ class OnKeyErrorBehavior(Enum):
 
 
 @dataclass
+class FontData:
+    name: str
+    font: str
+    size: int
+
+
+@dataclass
 class Font:
-    default_font: str = "malgungothic"
-    default_size: float = 18.0
+    fonts: list[FontData]
+
+    def get_font(self, name: str):
+        for font in self.fonts:
+            if font.name == name:
+                return pg.font.SysFont(font.font, font.size, False, False)
+
+
+type _display_size = list[int, int]
+# type _display_mode = Literal["w", "bw", "f"]
+
+@dataclass
+class Display:
+    @dataclass
+    class WindowSize:
+        available: dict[str, _display_size]
+        current: str
+
+    window_size: WindowSize
+    vsync: bool = False
+    framerate: int = 60
+    display: int = 0
 
 
 @dataclass
 class Config:
-    font: Font
+    fonts: list[FontData]
+    display: Display
 
     @staticmethod
     def get_config(index: Optional[str] = None,
