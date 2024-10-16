@@ -1,8 +1,8 @@
 from src.game.deck import Deck
 from src.game.tile.types import Position
 from src.game.unit.base import BaseUnit
-from src.game.rule import GameSystem
 
+class Player: pass
 
 class Player:
     def __init__(self, nickname: str, ticket: int, deck: Deck):
@@ -17,6 +17,7 @@ class Player:
         :param pos:
         :return:
         """
+        from src.game.rule import GameSystem
         GameSystem().map_data[pos.q][pos.r].place_unit(unit)
 
     def surrender(self) -> None:
@@ -26,5 +27,6 @@ class Player:
         티켓을 모두 제거하고 턴을 넘김
         :return:
         """
+        from src.game.rule import GameSystem
         self.ticket = 0
         GameSystem().switch_turn()
