@@ -1,40 +1,28 @@
-from abc import abstractmethod, ABCMeta
+from enum import IntEnum
 from typing import NamedTuple
 
 from pygame.font import Font
 
 
-class UIPosition(NamedTuple):
-    x: int
-    y: int
+class UIAlignment(IntEnum):
+    left = 0
+    center = 1
+    right = 2
+    top = 3
+    bottom = 4
 
 
-class UISize(NamedTuple):
-    x: int
-    y: int
+class UIPosition[T: int | float](NamedTuple):
+    x: T
+    y: T
 
 
-class RGB(NamedTuple):
-    r: int
-    g: int
-    b: int
+class UISize[T: int | float](NamedTuple):
+    x: T
+    y: T
 
 
-class RGBA(NamedTuple):
-    r: int
-    g: int
-    b: int
-    a: int
-
-
-def to_rgba(color: RGB) -> RGBA:
-    return RGBA(color.r, color.g, color.b, 0)
-
-def to_rgb(color: RGBA) -> RGB:
-    return RGB(color.r, color.g, color.b)
-
-
-class BaseUI(ABCMeta):
+class BaseUI:
     @property
     def position(self) -> UIPosition:
         return self.position
@@ -59,6 +47,5 @@ class BaseUI(ABCMeta):
     def font(self, font: Font):
         self.font = font
 
-    @abstractmethod
-    def render(self, *args):
-        pass
+    def render(self, *args, **kwargs):
+        raise NotImplementedError

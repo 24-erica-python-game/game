@@ -1,7 +1,9 @@
 from dataclasses import dataclass
 from types import FunctionType
-from typing import Optional
+from typing import Optional, Self
 
+from game.tile.types import Position
+from game.unit.base import BaseUnit
 from src.game.command import commands
 from src.game.deck import Deck
 from src.game.player import Player
@@ -16,7 +18,7 @@ class GameRule:
 
 
 class GameSystem:
-    _instance: Optional['GameSystem'] = None
+    _instance: Optional[Self] = None
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
@@ -31,6 +33,8 @@ class GameSystem:
         if not hasattr(self, '_initialized'):
             if ruleset is None:
                 raise ValueError("ruleset must be provided when init.")
+
+            from src.game.player import Player
 
             self.ruleset = ruleset
             self.players = [Player(f"P{i + 1}", ruleset.start_ticket, Deck()) for i in range(2)]
@@ -80,3 +84,26 @@ class GameSystem:
         self.map_data = map_data
 
         return self.map_data
+
+    def deploy_unit(self, player: Player, unit: BaseUnit, pos: Position) -> None:
+        """
+        유닛을 배치하는 메서드
+        :param player:
+        :param unit:
+        :param pos:
+        :return:
+        """
+        # TODO: 어떤 플레이어의 유닛을 배치할 것인지에 대해 나와있지 않음
+        self.map_data[pos.q][pos.r].place_unit(unit)
+
+    def defeat_player(self, player: Player) -> None:
+        """
+        패배 메서드
+
+        티켓을 모두 제거하고 턴을 넘김
+        :param player:
+        :return:
+        """
+        player.ticket = 0
+        self.switch_turn()  # 티켓이 0이 되면 바로 게임이 끝날 것인데 굳이 플레이어의 턴을 종료하는 함수를 넣는것이 맞나?
+

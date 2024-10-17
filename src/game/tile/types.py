@@ -1,8 +1,8 @@
 from enum import IntEnum, Enum
-from typing import NamedTuple, Optional, TYPE_CHECKING
+from typing import NamedTuple, Optional, Self
 
-if TYPE_CHECKING:
-    from game.tile.types import Position, CubeCoordinates, AxialCoordinates
+# if TYPE_CHECKING:
+#     from game.tile.types import Position, CubeCoordinates, AxialCoordinates
 
 
 class AxialCoordinates:
@@ -15,27 +15,23 @@ class AxialCoordinates:
         self.r = r
         # self.s = -q - r
 
-    def __sub__(self, opposite: AxialCoordinates) -> AxialCoordinates:
+    def __sub__(self, opposite: Self) -> Self:
         return Position(
             self.q - opposite.q,
             self.r - opposite.r
         )
 
-    def __add__(self, opposite: AxialCoordinates) -> AxialCoordinates:
+    def __add__(self, opposite: Self) -> Self:
         return Position(
             self.q + opposite.q,
             self.r + opposite.r
         )
 
-    def distance_to(self, opposite: AxialCoordinates) -> float:
+    def distance_to(self, opposite: Self) -> float:
         return (abs(self.q - opposite.q) +
                 abs(self.q - opposite.q  +
                     self.r - opposite.r) +
                 abs(self.r - opposite.r)) / 2
-
-    @staticmethod
-    def axial_to_cube_coordinates(c: AxialCoordinates) -> CubeCoordinates:
-        return CubeCoordinates(q=c.q, r=c.r, s=(-c.q - c.r))
 
 
 class CubeCoordinates:
@@ -48,28 +44,32 @@ class CubeCoordinates:
         self.r = r
         self.s = s
 
-    def __sub__(self, opposite: CubeCoordinates) -> CubeCoordinates:
+    def __sub__(self, opposite: Self) -> Self:
         return CubeCoordinates(
             self.q - opposite.q,
             self.r - opposite.r,
             self.s - opposite.s
         )
 
-    def __add__(self, opposite: CubeCoordinates) -> CubeCoordinates:
+    def __add__(self, opposite: Self) -> Self:
         return CubeCoordinates(
             self.q + opposite.q,
             self.r + opposite.r,
             self.s + opposite.s
         )
 
-    def distance_to(self, opposite: CubeCoordinates) -> float:
+    def distance_to(self, opposite: Self) -> float:
         return (abs(self.q - opposite.q) +
                 abs(self.r - opposite.r) +
                 abs(self.s - opposite.s)) / 2
 
-    @staticmethod
-    def cube_to_axial_coordinates(c: CubeCoordinates) -> AxialCoordinates:
-        return AxialCoordinates(q=c.q, r=c.r)
+
+def cube_to_axial_coordinates(c: CubeCoordinates) -> AxialCoordinates:
+    return AxialCoordinates(q=c.q, r=c.r)
+
+
+def axial_to_cube_coordinates(c: AxialCoordinates) -> CubeCoordinates:
+    return CubeCoordinates(q=c.q, r=c.r, s=(-c.q - c.r))
 
 
 class Position(AxialCoordinates):

@@ -12,8 +12,8 @@ class GameInfo(BaseUI):
         self.player_ticket = None
         self.turn_count = None
 
-        self.font = pg.font.SysFont(Config.get_config("font.default_font"),
-                                    Config.get_config("font.default_size"))
+        self.font = pg.font.SysFont(Config.get_config("font.default.font"),
+                                    Config.get_config("font.default.size"))
         self.position = UIPosition(640, 10)
         self.size = UISize(1280, 50)
 

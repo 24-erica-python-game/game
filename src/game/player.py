@@ -1,7 +1,6 @@
 from src.game.deck import Deck
 from src.game.tile.types import Position
 from src.game.unit.base import BaseUnit
-from src.game.rule import GameSystem
 
 
 class Player:
@@ -9,22 +8,3 @@ class Player:
         self.nickname = nickname
         self.ticket = ticket
         self.deck = deck
-
-    def deploy_unit(self, unit: BaseUnit, pos: Position) -> None:
-        """
-        유닛을 배치하는 메서드
-        :param unit:
-        :param pos:
-        :return:
-        """
-        GameSystem().map_data[pos.q][pos.r].place_unit(unit)
-
-    def surrender(self) -> None:
-        """
-        항복 메서드
-
-        티켓을 모두 제거하고 턴을 넘김
-        :return:
-        """
-        self.ticket = 0
-        GameSystem().switch_turn()
