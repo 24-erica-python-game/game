@@ -51,8 +51,7 @@ class BaseSocket:
         except AttributeError:  # if None;
             print("Connection is not established", file=sys.stderr)
 
-
-# h = WSHandler()
-# d = h._pack('19239')
-# print(h._unpack(d, None))
-# print(h._unpack(d))
+# h = BaseSocket()
+# d = h.pack('19239')
+# print(h.unpack(d, None))
+# print(h.unpack(d))
