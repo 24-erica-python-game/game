@@ -24,6 +24,10 @@ class GameSystem:
         return cls._instance
 
     def __init__(self, ruleset: Optional[GameRule] = None) -> None:
+        """
+        :param ruleset: 게임 시스템을 초기화할 규칙, None일 경우 게임 시스템을 호출함
+        :raises ValueError: `GameSystem` 이 초기화되지 않았으며 `ruleset` 이 None 일 경우
+        """
         if not hasattr(self, '_initialized'):
             if ruleset is None:
                 raise ValueError("ruleset must be provided when init.")
@@ -67,7 +71,7 @@ class GameSystem:
             if player.ticket <= 0:
                 self.players.remove(player)
 
-    def register_map(self, map_data: list[list[BaseTile]]) -> list[list[BaseTile]]:
+    def set_map(self, map_data: list[list[BaseTile]]) -> list[list[BaseTile]]:
         """
         맵 데이터를 등록하고 등록된 맵 데이터를 반환함.
         :param map_data: 맵 데이터

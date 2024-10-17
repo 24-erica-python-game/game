@@ -1,3 +1,4 @@
+from game.rule import GameSystem
 from src.multiplay.message.cmd_token import Number, String
 
 
@@ -16,11 +17,11 @@ class register:
         return self.func(*args, **kwargs)
 
 
-@register
-def _call_test_without_args():
-    print("_call_test_no_args called;")
+# @register
+# def _call_test_without_args():
+#     print("_call_test_no_args called;")
 
 
-@register
-def _call_test_with_args(*args):
-    print(f"_call_test_with_args called;\nargs: {args}")
+# @register
+# def _call_test_with_args(*args):
+#     print(f"_call_test_with_args called;\nargs: {args}")
