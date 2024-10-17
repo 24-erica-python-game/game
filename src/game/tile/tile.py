@@ -1,14 +1,7 @@
-from abc import ABCMeta
-
-from game.tile.structure import *
-from game.tile.types import *
-from game.tile.base import *
-from game.unit.unit import *
-
-from utils.config import Config
-
 import json
 
+from game.tile.structure import *
+from game.unit.unit import *
 from src.game.tile.base import *
 
 

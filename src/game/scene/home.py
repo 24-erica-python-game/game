@@ -1,6 +1,6 @@
-from game.scene import Scene
+from game.scene.base import Scene
 
 
-class Home(Scene):
+class HomeScene(Scene):
     def run(self):
         pass

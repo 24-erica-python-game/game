@@ -1,11 +1,13 @@
 {
-    "fonts": [
-        {
-            "name": "default",
-            "font": "malgungothic",
-            "size": 18
-        }
-    ],
+    "font": {
+        "fonts": [
+            {
+                "name": "default",
+                "font": "malgungothic",
+                "size": 18
+            }
+        ]
+    },
     "display": {
         "window_size": {
             "available": {

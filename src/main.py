@@ -1,6 +1,7 @@
 import pygame as pg
 
-from game.scene import scenes
+from game.scene.home import HomeScene
+from game.scene.in_game import GameScene
 from utils.config import Config
 
 pg.init()  # 게임 엔진 초기화
@@ -13,13 +14,18 @@ small_font = pg.font.SysFont("malgungothic", 14, False, False)
 
 display_config = Config.get_config("display")
 size = display_config["window_size"]["current"]
+size = Config.get_config(f"display.window_size.available.{size}")
 framerate = display_config["framerate"]
 vsync = display_config["vsync"]
 screen = pg.display.set_mode(size, vsync=vsync)
 
 pg.display.set_caption("Buggy Buddies")
 
-current_scene: str = scenes.Home
+
+current_scene: str = "home"
+scenes = {
+    "home": HomeScene(),
+}
 
 while running:
     clock.tick(framerate)  # 30프레임 / 너무 높으면 CPU많이 먹으니까 10,30,60이 적당
@@ -30,9 +36,9 @@ while running:
                 running = False
 
     match current_scene:
-        case scenes.Home:
-            scenes.Home.run()
-        case scenes.InGame:
-            scenes.InGame.run()
+        case "home":
+            scenes["home"].run()
+        # case "game":
+        #     GameScene.run()
 
     pg.display.flip() #pygame의 메인 루프 끝에 반드시 사용

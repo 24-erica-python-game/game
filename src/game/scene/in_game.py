@@ -1,10 +1,9 @@
-from game.scene import Scene
+from game.scene.base import Scene
 from game.tile.tile import TileMap
 
 
-class InGame(Scene):
+class GameScene(Scene):
     def __init__(self, map_name: str):
-        super().__init__()
         self.tile_map = TileMap(map_name)
 
     def main_loop(self):
