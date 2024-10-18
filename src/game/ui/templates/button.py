@@ -10,17 +10,26 @@ from game.ui.templates.interactable import Interactable
 
 class Button(Interactable):
     """
-    버튼 템플릿 클래스
+    버튼 템플릿.
 
-    이 클래스를 상속받은 후 on_clicked 메서드를 오버라이드해 버튼 클릭시 동작을 정의해 사용
+    이 클래스를 상속받은 후 on_clicked 메서드를 오버라이드해 버튼 클릭시 동작을 정의해 사용함.
     """
     def __init__(self,
                  label: str,
                  label_font: pg.font.FontType,
                  pos: UIPosition,
                  size: UISize,
+                 *,
                  foreground: RGB,
                  background: RGB):
+        """
+        :param label: 버튼의 레이블
+        :param label_font: 레이블의 폰트
+        :param pos: 버튼의 위치
+        :param size: 버튼의 크기
+        :param foreground: (keyword-only) 레이블의 색
+        :param background: (keyword-only) 버튼의 배경색
+        """
         super().__init__(pos, size)
         self.label = label
         self.font = label_font
@@ -31,7 +40,7 @@ class Button(Interactable):
 
     def set_color(self, foreground: Optional[RGB] = None, background: Optional[RGB] = None):
         """
-        버튼의 색상을 설정함
+        버튼의 색상을 설정함.
         :param foreground: 글자의 색, None일 경우 변경하지 않음
         :param background: 글자의 배경색, None일 경우 변경하지 않음
         :return:
@@ -43,7 +52,7 @@ class Button(Interactable):
 
     def set_size(self, size: UISize):
         """
-        버튼의 크기를 결정함
+        버튼의 크기를 결정함.
         :param size: 변경할 크기, 만약 x 또는 y값이 -1일 경우 그 값은 변경하지 않음.
         :return:
         """
@@ -56,7 +65,7 @@ class Button(Interactable):
 
     def set_pos(self, pos: UIPosition):
         """
-        버튼의 위치를 결정함
+        버튼의 위치를 결정함.
         :param pos: 변경할 위치, 만약 x 또는 y값이 -1일 경우 그 값은 변경하지 않음.
         :return:
         """
@@ -69,7 +78,7 @@ class Button(Interactable):
 
     def set_label(self, label: str):
         """
-        버튼의 레이블을 변경함
+        버튼의 레이블을 변경함.
         :param label: 변경할 문자열
         :return:
         """
@@ -77,7 +86,7 @@ class Button(Interactable):
 
     def set_font(self, font: FontType):
         """
-        버튼의 폰트를 변경함
+        버튼의 폰트를 변경함.
         :param font:
         :return:
         """
@@ -93,6 +102,10 @@ class Button(Interactable):
                       self.pos[1] + (self.size[1] / 2) - (text_size[1] / 2)))
 
     def on_clicked(self):
+        """
+        버튼이 클릭되었을 때 호출되는 함수, 상속받은 버튼 클래스는 이 메서드를 오버라이딩해 버튼 클릭 시의 동작을 정의해야 함.
+        :return:
+        """
         raise NotImplementedError
 
 
@@ -120,9 +133,10 @@ if __name__ == "__main__":
                      label_font: pg.font.FontType,
                      pos: UIPosition,
                      size: UISize,
+                     *,
                      foreground: RGB,
                      background: RGB):
-            super().__init__(label, label_font, pos, size, foreground, background)
+            super().__init__(label, label_font, pos, size, foreground=foreground, background=background)
 
         def on_clicked(self):
             self.set_pos(UIPosition(-1, self.pos.y - 1))
@@ -130,8 +144,8 @@ if __name__ == "__main__":
             print("button clicked")
 
 
-    button = ButtonTest("button_label", small_font, UIPosition(100, 143), UISize(200, 14), RGB(0, 0, 0),
-                        RGB(199, 199, 199))
+    button = ButtonTest("button_label", small_font, UIPosition(100, 143), UISize(200, 14),
+                        foreground=RGB(0, 0, 0), background=RGB(199, 199, 199))
 
     while running:
         screen.fill(Color.WHITE)

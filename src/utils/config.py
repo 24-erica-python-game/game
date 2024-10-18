@@ -1,9 +1,11 @@
 import json
+import os
 from dataclasses import dataclass
 from enum import Enum
-from typing import Optional
+from typing import Optional, Any
+
 import pygame as pg
-import os
+from pygame.font import FontType
 
 
 _config_path = os.path.normpath(f"{os.getcwd()}/data/config.json")
@@ -25,10 +27,19 @@ class FontData:
 class Font:
     fonts: list[FontData]
 
-    def get_font(self, name: str):
-        for font in self.fonts:
+    @staticmethod
+    def get_font(name: str, fonts: list) -> FontType:
+        """
+        폰트 데이터 목록에서 폰트를 검색한 결과를 반환함.
+        :param name: 폰트 데이터의 이름
+        :param fonts: 폰트 목록, 일반적으로 ``Config.get_config("font.fonts")`` 가 들어감.
+        :raises ValueError: 해당 폰트를 찾지 못했을 경우
+        :return:
+        """
+        for font in fonts:
             if font.name == name:
                 return pg.font.SysFont(font.font, font.size, False, False)
+        raise ValueError(f"Font not found: {name}")
 
 
 type _display_size = list[int]
@@ -55,7 +66,7 @@ class Config:
     @staticmethod
     def get_config(index: Optional[str] = None,
                    delimiter: str = '.',
-                   on_key_error: OnKeyErrorBehavior = OnKeyErrorBehavior.ReturnNone):
+                   on_key_error: OnKeyErrorBehavior = OnKeyErrorBehavior.ReturnNone) -> Any:
         """
         data/config.json의 값을 가져옴.
 
@@ -75,12 +86,12 @@ class Config:
         >>> Config.get_config("foo/bar", delimiter='/')
         10
 
-        :param index: 접근할 인덱스, delimiter 값을 기준으로 str.split()을 수행함
+        :param index: 접근할 인덱스, ``delimiter`` 값을 기준으로 ``str.split()`` 을 수행함
         :param delimiter: 인덱스를 나눌 구분자
         :param on_key_error: 인덱스를 찾을 수 없을 경우 처리할 행동
-        :raises KeyError: 인덱스를 찾을 수 없으며 on_key_error가 RaiseError로 설정되어있을 경우
+        :raises KeyError: 인덱스를 찾을 수 없으며 ``on_key_error`` 가 ``RaiseError`` 로 설정되어있을 경우
         :raises FileNotFoundError: 파일이 없는 경우
-        :return: 찾은 결과, 만약 인덱스를 찾지 못했으며 on_key_error가 ReturnNone일 경우 None이 리턴됨
+        :return: 찾은 결과, 만약 인덱스를 찾지 못했으며 ``on_key_error`` 가 ``ReturnNone`` 일 경우 ``None`` 이 리턴됨
         """
         with open(_config_path, 'r') as f:
             config: dict = json.load(f)
@@ -104,7 +115,7 @@ class Config:
     @staticmethod
     def set_config(value, index: Optional[str] = None, delimiter: str = '.'):
         """
-        data/config.json의 값을 가져온 후 index의 값을 value로 설정함.
+        ``data/config.json`` 의 값을 가져온 후 ``index`` 의 값을 ``value`` 로 설정함.
 
         >>> config = {
         ...     "foo": {

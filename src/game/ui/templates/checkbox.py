@@ -8,6 +8,9 @@ from game.ui.templates.interactable import Interactable
 
 
 class CheckBox(Interactable):
+    """
+    체크박스 템플릿.
+    """
     def __init__(self,
                  default_state: bool,
                  active_color: RGB,
@@ -39,7 +42,7 @@ class CheckBox(Interactable):
 
     def toggle_state(self) -> bool:
         """
-        체크박스의 상태를 바꿔 다시 렌더링한 뒤, 바뀐 상태를 반환한다.
+        체크박스의 상태를 바꿔 다시 렌더링한 뒤, 바뀐 상태를 반환함.
 
         :return: 체크박스의 최종 상태
         """

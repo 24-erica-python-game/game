@@ -3,7 +3,6 @@ from typing import NamedTuple
 import numpy as np
 import pygame as pg
 from pygame import gfxdraw as gfx
-from pygame.rect import RectType
 
 from game.ui.base import UIPosition, UISize
 from game.ui.color import RGB, RGBA
@@ -17,7 +16,8 @@ class SliderHead(Interactable):
         :param radius: (keyword-only) 원형 모양 헤드의 반지름
         """
         self.radius = radius
-        self.color = RGB(230, 230, 230)
+        self.primary_color = RGB(230, 230, 230)
+        self.secondary_color = RGB(200, 200, 200)
         self.shape = "circle"
         super().__init__(UIPosition(0, 0), UISize(radius * 2, radius * 2))
 
@@ -28,21 +28,33 @@ class SliderHead(Interactable):
         initialized.shape = "rectangle"
         return initialized
 
-    def set_color(self, color: RGB | RGBA):
-        self.color = color
+    def set_color(self, *, primary: RGB | RGBA = None, secondary: RGB | RGBA = None):
+        """
+        슬라이더 헤드의 색상을 변경함
+        :param primary: 슬라이더 헤드의 색상
+        :param secondary: 슬라이더 헤드의 테두리 색상
+        :return:
+        """
+        if primary is not None:
+            self.primary_color = primary
+        if secondary is not None:
+            self.secondary_color = secondary
 
     def render(self):
         display = pg.display.get_surface()
         match self.shape:
             case "circle":
-                pg.draw.circle(display, self.color, self.pos, self.radius)
+                pg.draw.circle(display, self.primary_color, self.pos, self.radius)
                 gfx.aacircle(display, int(self.pos.x), int(self.pos.y), self.radius, RGB(200, 200, 200))
             case "rectangle":
-                pg.draw.rect(display, self.color, (self.pos, self.size))
+                pg.draw.rect(display, self.primary_color, (self.pos, self.size))
                 gfx.rectangle(display, (self.pos, self.size), RGB(200, 200, 200))
 
 
 class Slider[T: int | float]:
+    drag = False
+    __instances = []
+
     class ValueRange(NamedTuple):
         min_: T
         max_: T
@@ -71,15 +83,23 @@ class Slider[T: int | float]:
         self.start_pos = start_pos
         self.end_pos = end_pos
         self.color = RGBA(0, 0, 0, 255)
-        range_ = np.arange(self.value_range.min_, self.value_range.max_ + self.value_range.step_, self.value_range.step_)
+        range_ = np.arange(self.value_range.min_, self.value_range.max_ + self.value_range.step_,
+                           self.value_range.step_)
         self.range_list = list(map(float, range_))
+        self.drag_ = False
+        Slider.__instances.append(self)
 
     def clamp_head_pos(self, pos: UIPosition):
+        """
+        슬라이더 헤드가 슬라이더 바로부터 벗어나지 않도록 고정하는 함수
+        :param pos: 슬라이더 헤드의 위치
+        :return:
+        """
         try:
             a = (self.end_pos.y - self.start_pos.y) / (self.end_pos.x - self.start_pos.x)
             b = self.end_pos.y - a * self.end_pos.x
             x = pg.math.clamp(pos.x, self.start_pos.x, self.end_pos.x)
-            y = a*x + b
+            y = a * x + b
             match self.head.shape:
                 case "circle":
                     return UIPosition(x, y)
@@ -97,6 +117,10 @@ class Slider[T: int | float]:
                     return UIPosition(self.start_pos.x - (self.head.size.x / 2), y - (self.head.size.y / 2))
 
     def set_value_from_pos(self):
+        """
+        슬라이더 헤드의 위치를 토대로 값을 설정함
+        :return:
+        """
         try:
             d = (self.end_pos.x - self.start_pos.x)  # 0 <= d_x
             start_pos_ = self.start_pos.x
@@ -117,6 +141,11 @@ class Slider[T: int | float]:
         self.value = nearest
 
     def set_value_from_value(self, value: T):
+        """
+        주어진 값을 토대로 슬라이더 헤드의 위치를 설정함
+        :param value: 설정할 값
+        :return:
+        """
         self.value = pg.math.clamp(value, self.value_range.min_, self.value_range.max_)
         try:
             d = (self.end_pos.x - self.start_pos.x)  # 0 <= d_x
@@ -134,18 +163,63 @@ class Slider[T: int | float]:
 
     def set_color(self, color: RGB | RGBA):
         """
-        슬라이더 바의 색상을 변경함, 슬라이더 헤드의 색상을 변경하려면 슬라이더 헤드의 set_color 메서드를 호출해야함
+        슬라이더 바의 색상을 변경함, 슬라이더 헤드의 색상을 변경하려면 슬라이더 헤드의 ``set_color`` 메서드를 호출해야함
         :param color: 변경할 색상
         :return:
         """
         self.color = color
 
     def on_head_clicked(self):
+        """
+        슬라이더 헤드가 클릭되었을 때 호출되어야 하는 함수, 이 함수를 통해 슬라이더 헤드의 위치를 설정함.
+        :return:
+        """
         self.head.pos = self.clamp_head_pos(UIPosition(pg.mouse.get_pos()[0],
                                                        pg.mouse.get_pos()[1]))
         self.set_value_from_pos()
 
+    @staticmethod
+    def on_mousebutton_down():
+        """
+        >>> for event in pg.event.get():
+        ...     match event.type:
+        ...         case pg.QUIT:
+        ...             running = False
+        ...         case pg.MOUSEBUTTONDOWN:
+        ...             Slider.on_mousebutton_down()
+        ...         case pg.MOUSEBUTTONUP:
+        ...             Slider.on_mousebutton_up()
+
+        슬라이더의 드래그 상태를 조작하기 위해 ``pg.MOUSEBUTTONDOWN`` 이벤트를 수신받으면 호출해야 하는 함수
+        :return:
+        """
+        Slider.drag = True
+
+    @staticmethod
+    def on_mousebutton_up():
+        """
+        >>> for event in pg.event.get():
+        ...     match event.type:
+        ...         case pg.QUIT:
+        ...             running = False
+        ...         case pg.MOUSEBUTTONDOWN:
+        ...             Slider.on_mousebutton_down()
+        ...         case pg.MOUSEBUTTONUP:
+        ...             Slider.on_mousebutton_up()
+
+        슬라이더의 드래그 상태를 조작하기 위해 ``pg.MOUSEBUTTONDOWN`` 이벤트를 수신받으면 호출해야 하는 함수
+        :return:
+        """
+        for slider in Slider.__instances:
+            slider.drag_ = False
+
     def render(self):
+        # FIXME: 슬라이더를 드래그하면서 다른 슬라이더의 헤드가 마우스 위에 있으면 그 슬라이더까지 값이 변경되는 문제
+        if Slider.drag and self.head.is_mouse_in_area():
+            self.drag_ = True
+        if self.drag_ and pg.mouse.get_pressed()[0]:
+            self.on_head_clicked()
+
         display = pg.display.get_surface()
 
         # bar
@@ -173,23 +247,17 @@ if __name__ == "__main__":
     running = True
     clock = pg.time.Clock()
 
-    drag = False
-    drag_ = False
-    drag_2 = False
-
     head = SliderHead(radius=3)
     slider = Slider((0.0, 100.0, 2.5), head, UIPosition(150.0, 150.0), UIPosition(250.0, 150.0))
-    textbox = TextBox(UIPosition(150, 125), UISize(100, 20), small_font, str(slider.value))
-
     slider.set_value_from_value(50)
+
+    textbox = TextBox(UIPosition(150, 125), UISize(100, 20), small_font, str(slider.value))
 
     square_head = SliderHead.from_rect(UISize(10, 20))
     slider_2 = Slider((0, 10, 1), square_head, UIPosition(135, 100), UIPosition(135, 140))
-    print(slider_2.head.pos)
-    print(slider_2.start_pos, slider_2.end_pos)
     slider_2.set_value_from_value(2)
 
-    slider_2.head.set_color(RGBA(230, 230, 230, 0))
+    slider_2.head.set_color(primary=RGBA(230, 230, 230, 0))
 
     while running:
         screen.fill(Color.WHITE)
@@ -200,22 +268,9 @@ if __name__ == "__main__":
                 case pg.QUIT:
                     running = False
                 case pg.MOUSEBUTTONDOWN:
-                    drag = True
+                    Slider.on_mousebutton_down()
                 case pg.MOUSEBUTTONUP:
-                    drag = False
-                    drag_ = False
-                    drag_2 = False
-
-        # 개선된 조작감을 위해 drag 변수를 2개를 둠. 만약 1개일 경우 조작감이 매우 불편해짐
-        if drag and slider.head.is_mouse_in_area():
-            drag_ = True
-        if drag_ and pg.mouse.get_pressed()[0]:
-            slider.on_head_clicked()
-
-        if drag and slider_2.head.is_mouse_in_area():
-            drag_2 = True
-        if drag_2 and pg.mouse.get_pressed()[0]:
-            slider_2.on_head_clicked()
+                    Slider.on_mousebutton_up()
 
         slider.render()
         textbox.label = f"{slider.value:.1f}"
