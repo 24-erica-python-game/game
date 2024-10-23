@@ -3,7 +3,7 @@ from pygame.font import FontType
 from game.ui.base import UIPosition, UISize
 from game.ui.color import RGB
 from game.ui.templates.interactable import Interactable
-from game.ui.templates.slider import Scrollbar
+from game.ui.templates.scrollbar import ScrollBar
 
 
 class DropdownItem(Interactable):
@@ -17,7 +17,7 @@ class Dropdown[T](Interactable):
                  default_idx: int,
                  font: FontType,
                  max_size: UISize,
-                 scrollbar: Scrollbar | None,
+                 scrollbar: ScrollBar | None,
                  pos: UIPosition,
                  size: UISize,
                  background: RGB):

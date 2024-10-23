@@ -101,7 +101,7 @@ class Button(Interactable):
                      (self.pos[0] + (self.size[0] / 2) - (text_size[0] / 2),
                       self.pos[1] + (self.size[1] / 2) - (text_size[1] / 2)))
 
-    def on_clicked(self):
+    def on_click(self):
         """
         버튼이 클릭되었을 때 호출되는 함수, 상속받은 버튼 클래스는 이 메서드를 오버라이딩해 버튼 클릭 시의 동작을 정의해야 함.
         :return:

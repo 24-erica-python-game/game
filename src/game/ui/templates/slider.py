@@ -1,31 +1,52 @@
-from typing import NamedTuple
+from enum import IntEnum
+from os import PathLike
+from typing import NamedTuple, Optional
 
 import numpy as np
 import pygame as pg
-from pygame import gfxdraw as gfx
+from pygame import gfxdraw as gfx, SurfaceType, BLEND_RGBA_MULT
 
 from game.ui.base import UIPosition, UISize
 from game.ui.color import RGB, RGBA
 from game.ui.templates.interactable import Interactable
 
 
+class SliderHeadShape(IntEnum):
+    CIRCLE = 0
+    RECTANGLE = 1
+    IMAGE = 2
+
+
 class SliderHead(Interactable):
-    def __init__(self, *, radius: int):
-        """
-        슬라이더의 헤드 객체
-        :param radius: (keyword-only) 원형 모양 헤드의 반지름
-        """
-        self.radius = radius
+    def __init__(self, size: UISize):
         self.primary_color = RGB(230, 230, 230)
         self.secondary_color = RGB(200, 200, 200)
-        self.shape = "circle"
-        super().__init__(UIPosition(0, 0), UISize(radius * 2, radius * 2))
+        self.shape = SliderHeadShape.RECTANGLE
+        self.img: Optional[SurfaceType] = None
+        self.radius: Optional[int] = None
+        super().__init__(UIPosition(0, 0), size)
+
+    @classmethod
+    def from_circle(cls, radius: int):
+        initialized = SliderHead(UISize(radius ** 2, radius ** 2))
+        initialized.radius = radius
+        initialized.shape = SliderHeadShape.CIRCLE
+        return initialized
 
     @classmethod
     def from_rect(cls, size: UISize):
-        initialized = SliderHead(radius=0)
+        initialized = SliderHead(size)
         initialized.size = size
-        initialized.shape = "rectangle"
+        initialized.shape = SliderHeadShape.RECTANGLE
+        return initialized
+
+    @classmethod
+    def from_image(cls, path: PathLike, size: UISize):
+        initialized = SliderHead(size)
+        img = pg.image.load(path).convert_alpha()
+        initialized.img = pg.transform.scale(img, size)
+        initialized.size = size
+        initialized.shape = SliderHeadShape.IMAGE
         return initialized
 
     def set_color(self, *, primary: RGB | RGBA = None, secondary: RGB | RGBA = None):
@@ -43,12 +64,15 @@ class SliderHead(Interactable):
     def render(self):
         display = pg.display.get_surface()
         match self.shape:
-            case "circle":
+            case SliderHeadShape.CIRCLE:
                 pg.draw.circle(display, self.primary_color, self.pos, self.radius)
                 gfx.aacircle(display, int(self.pos.x), int(self.pos.y), self.radius, RGB(200, 200, 200))
-            case "rectangle":
+            case SliderHeadShape.RECTANGLE:
                 pg.draw.rect(display, self.primary_color, (self.pos, self.size))
                 gfx.rectangle(display, (self.pos, self.size), RGB(200, 200, 200))
+            case SliderHeadShape.IMAGE:
+                screen = pg.display.get_surface()
+                screen.blit(self.img, self.pos, special_flags=pg.BLEND_RGBA_MULT)
 
 
 class Slider[T: int | float]:
@@ -101,9 +125,9 @@ class Slider[T: int | float]:
             x = pg.math.clamp(pos.x, self.start_pos.x, self.end_pos.x)
             y = a * x + b
             match self.head.shape:
-                case "circle":
+                case SliderHeadShape.CIRCLE:
                     return UIPosition(x, y)
-                case "rectangle":
+                case SliderHeadShape.RECTANGLE | SliderHeadShape.IMAGE:
                     return UIPosition(x - (self.head.size.x / 2), y - (self.head.size.y / 2))
         except ZeroDivisionError:
             if self.start_pos.y < self.end_pos.y:
@@ -111,9 +135,9 @@ class Slider[T: int | float]:
             else:
                 y = pg.math.clamp(pos.y, self.end_pos.y, self.start_pos.y)
             match self.head.shape:
-                case "circle":
+                case SliderHeadShape.CIRCLE:
                     return UIPosition(self.start_pos.x, y)
-                case "rectangle":
+                case SliderHeadShape.RECTANGLE | SliderHeadShape.IMAGE:
                     return UIPosition(self.start_pos.x - (self.head.size.x / 2), y - (self.head.size.y / 2))
 
     def set_value_from_pos(self):
@@ -230,7 +254,6 @@ class Slider[T: int | float]:
 
 
 if __name__ == "__main__":
-    from game.ui.color import Color
     from game.ui.templates.textbox import TextBox
 
     pg.init()
@@ -247,8 +270,11 @@ if __name__ == "__main__":
     running = True
     clock = pg.time.Clock()
 
-    head = SliderHead(radius=3)
+    screen.fill(RGBA(0, 255, 0, 255), special_flags=BLEND_RGBA_MULT)
+
+    head = SliderHead.from_circle(3)
     slider = Slider((0.0, 100.0, 2.5), head, UIPosition(150.0, 150.0), UIPosition(250.0, 150.0))
+    slider.set_color(RGBA(0, 0, 0, 0))
     slider.set_value_from_value(50)
 
     textbox = TextBox(UIPosition(150, 125), UISize(100, 20), small_font, str(slider.value))
@@ -260,7 +286,7 @@ if __name__ == "__main__":
     slider_2.head.set_color(primary=RGBA(230, 230, 230, 0))
 
     while running:
-        screen.fill(Color.WHITE)
+        screen.fill(RGBA(0, 255, 0, 255), special_flags=BLEND_RGBA_MULT)
         clock.tick(30)
 
         for event in pg.event.get():
