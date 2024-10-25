@@ -1,4 +1,5 @@
 import json
+from typing import Optional
 
 from game.tile.structure import *
 from game.unit.unit import *
@@ -38,7 +39,42 @@ class MountainTile(BaseTile):
         pass
 
 
-class TileMap:
+class MapManager:
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(MapManager, cls).__new__(cls)
+            cls.map_data: Optional[list[list[BaseTile]]] = None
+        return cls._instance
+
+    @classmethod
+    def get_instance(cls):
+        return cls()
+
+    @property
+    def map_data(self) -> Optional[list[list[BaseTile]]]:
+        return self.map_data
+
+    @map_data.setter
+    def map_data(self, map_data: Optional[list[list[BaseTile]]]) -> None:
+        self.map_data = map_data
+
+    def __getitem__(self, key: int) -> Optional[list[BaseTile]]:
+        return None if self.map_data is None else self.map_data[key]
+
+    def set_map(self, map_name: str) -> Optional[list[list[BaseTile]]]:
+        try:
+            with open(f"../assets/maps/{map_name}.json") as file_stream:
+                raw_map_data: dict = json.loads(file_stream.read())
+                self.map_data = self.__parse_map(raw_map_data)
+
+        except FileNotFoundError:
+            self.map_data = None
+
+        return self.map_data
+
+
     @staticmethod
     def __parse_map(raw_map_data: dict[str, Any]) -> list[list[BaseTile]]:
         metadata = raw_map_data["metadata"]
@@ -56,7 +92,7 @@ class TileMap:
             x: int = tile_mod["position"][0]
             y: int = tile_mod["position"][1]
 
-            tile = parsed_map[y][x]
+            tile: BaseTile = parsed_map[y][x]
 
             try:
                 match (tile_mod["tile"]):
@@ -106,9 +142,3 @@ class TileMap:
                 pass
 
         return parsed_map
-
-    def __init__(self, map_name: str) -> None:
-        with open(f"../assets/maps/{map_name}.json") as file_stream:
-            raw_map_data: dict = json.loads(file_stream.read())
-
-            self.tile_map: list[list[BaseTile]] = self.__parse_map(raw_map_data)

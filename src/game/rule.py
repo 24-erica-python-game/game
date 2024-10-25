@@ -34,8 +34,6 @@ class GameSystem:
             if ruleset is None:
                 raise ValueError("ruleset must be provided when init.")
 
-            from src.game.player import Player
-
             self.ruleset = ruleset
             self.players = [Player(f"P{i + 1}", ruleset.start_ticket, Deck()) for i in range(2)]
             self.current_turn = 0
@@ -49,6 +47,7 @@ class GameSystem:
         :return: 넘어간 플레이어의 인덱스
         """
         self.current_turn = (self.current_turn + 1) % len(self.players)
+
         return self.current_turn
 
     def call(self, cmd_name: str, *args):
@@ -75,17 +74,7 @@ class GameSystem:
             if player.ticket <= 0:
                 self.players.remove(player)
 
-    def set_map(self, map_data: list[list[BaseTile]]) -> list[list[BaseTile]]:
-        """
-        맵 데이터를 등록하고 등록된 맵 데이터를 반환함.
-        :param map_data: 맵 데이터
-        :return: 등록된 맵 데이터
-        """
-        self.map_data = map_data
-
-        return self.map_data
-
-    def deploy_unit(self, player: Player, unit: BaseUnit, pos: Position) -> None:
+    def deploy_unit(self, unit: BaseUnit, pos: Position) -> None:
         """
         유닛을 배치하는 메서드
         :param player:
@@ -105,5 +94,6 @@ class GameSystem:
         :return:
         """
         player.ticket = 0
-        self.switch_turn()  # 티켓이 0이 되면 바로 게임이 끝날 것인데 굳이 플레이어의 턴을 종료하는 함수를 넣는것이 맞나?
+        if self.current_turn == self.players.index(player):
+            self.switch_turn()
 

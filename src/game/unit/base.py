@@ -1,10 +1,12 @@
-import os
 import threading
 from abc import ABCMeta, abstractmethod
 from dataclasses import dataclass
 from enum import IntEnum
 from os import PathLike
+from queue import PriorityQueue
+from typing import Optional
 
+from src.game.tile.base import BaseTile
 from src.game.tile.types import Position
 
 
@@ -153,18 +155,48 @@ class BaseUnit(metaclass=ABCMeta):
             thread = threading.Thread(target=self.__load_animation, args=(animation_dir, animation_type.name.lower()))
             thread.start()
 
-    def move(self, path: list[Position]) -> bool:
+    def move(self, destination: Position) -> Optional[Position]:
         """
-        `BaseTile.get_path()`의 반환 값 토대로 유닛 이동. \n
-        올바른 이동일 경우 `True` 반환
+        A 타일에서 B 타일로 이동
+
+        :param b: 목적지 타일의 좌표, 이동하지 못했을 경우 None
         """
-        # TODO: 이동 로직 구현
-        try:
-            
-            # return self.movement_cost >= sum(path.cost)
-            return True
-        except IndexError:
-            return False
+        def g(t: BaseTile) -> float:
+            # actual cost
+            return float(t.movement_cost)
+
+        def h(t: BaseTile) -> float:
+            # heuristic func
+            return t.position.distance_to(destination)
+
+        queue = PriorityQueue()
+        queue.put((0, self.position, [self.position]))
+        visited = set()
+
+        while not queue.empty():
+            _node = queue.get()
+
+            current_cost: float = _node[0]
+            current_position: Position = _node[1]
+            path: list[Position] = _node[2]
+
+            if current_position in visited:
+                continue
+
+            visited.add(current_position)
+
+            if current_position == destination:
+                self.position = current_position
+
+                return current_position
+
+            for neighbor in self.get_neighbors():
+                if neighbor.position not in visited:
+                    total_cost = current_cost + g(neighbor) + h(neighbor)
+                    queue.put((total_cost, neighbor.position, path + [neighbor.position]))
+
+        return None
+
 
 
 class BaseSupplyUnit(BaseUnit):

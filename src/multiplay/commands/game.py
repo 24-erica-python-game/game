@@ -3,11 +3,11 @@ from src.game.command import register
 
 @register
 def set_map(map_name: str):
-    from src.game.tile.tile import TileMap
+    from src.game.tile.tile import MapManager
     from src.game.tile.base import BaseTile
 
     try:
-        tile_map: list[list[BaseTile]] = TileMap(map_name).tile_map
+        tile_map: list[list[BaseTile]] = MapManager(map_name).map_data
 
         GameSystem().set_map(tile_map)
         print(f"Map: {map_name}")
