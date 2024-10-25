@@ -5,18 +5,18 @@ from game.tile.tile import MapManager
 class GameScene(Scene):
     def __init__(self, map_name: str):
         self.tile_map = MapManager(map_name)
+        super().__init__("game")
 
-    def main_loop(self):
-        while True:
-            pass
-
-    def draw_ui(self):
+    def logic(self):
         pass
 
-    def handle_input(self):
+    def draw(self):
         pass
 
-    def run(self):
-        self.main_loop()
-        self.draw_ui()
-        self.handle_input()
+    def input(self):
+        pass
+
+    def run(self, *args, **kwargs):
+        self.logic()
+        self.draw()
+        self.input()

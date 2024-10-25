@@ -14,4 +14,4 @@ class Interactable:
     def is_mouse_in_area(self):
         mouse_x, mouse_y = pg.mouse.get_pos()
         return self.pos.x <= mouse_x <= self.pos.x + self.size.x and \
-            self.pos.y <= mouse_y <= self.pos.y + self.size.y
+               self.pos.y <= mouse_y <= self.pos.y + self.size.y

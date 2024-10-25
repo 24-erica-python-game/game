@@ -22,7 +22,7 @@ class RadioButtonGroup:
                  button_color: RGB,
                  active_color: RGB):
         """
-        라디오버튼 그룹을 생성함. 그룹당 하나의 활성화된 라디오버튼만 존재할 수 있다.
+        라디오버튼 그룹을 생성함. 그룹당 하나의 활성화된 라디오버튼만 존재할 수 있음.
         :param font: 라디오버튼 레이블의 폰트
         :param label_pos: 라디오버튼 레이블의 위치
         :param label_alignment: 라디오버튼 레이블의 정렬 위치
@@ -43,20 +43,41 @@ class RadioButtonGroup:
         self.active_color = active_color
 
     def check_buttons_clicked(self):
+        """
+        라디오버튼 그룹의 버튼이 클릭되었는지를 체크하는 함수
+        :return:
+        """
         for button in self.buttons:
             button.check_button_clicked()
 
     def render_buttons(self):
+        """
+        라디오버튼 그룹의 버튼을 렌더링함.
+        :return:
+        """
         for button in self.buttons:
             button.render()
 
     def set_active(self, active_id: t_button_id):
+        """
+        라디오버튼을 활성화한 상태로 설정함.
+        :param active_id: 활성화할 버튼의 ID
+        :return:
+        """
         self.active_id = active_id
 
     def get_current_active(self) -> t_button_id:
+        """
+        현재 활성화된 버튼의 ID를 반환함.
+        :return:
+        """
         return self.active_id
 
     def get_longest_text_size(self) -> UISize:
+        """
+        라디오버튼 그룹 내의 버튼의 레이블중 가장 긴 길이를 반환함.
+        :return:
+        """
         longest = max([self.font.render(button.label, True, self.label_color).get_size()
                        for button in self.buttons])
         return UISize(longest[0], longest[1])
@@ -70,7 +91,7 @@ class RadioButton(Interactable):
                  radius: float,
                  button_id: t_button_id):
         """
-        라디오버튼을 생성함. 라디오버튼은 라디오버튼 그룹에 속해있어야 함.
+        라디오버튼 템플릿. 라디오버튼은 라디오버튼 그룹에 속해있어야 함.
         :param group: 버튼이 속해있는 그룹
         :param label: 라디오버튼의 레이블
         :param pos: 버튼의 위치
@@ -91,6 +112,10 @@ class RadioButton(Interactable):
         group.buttons.append(self)
 
     def check_button_clicked(self):
+        """
+        버튼이 클릭되었는지 체크함.
+        :return:
+        """
         if self.is_mouse_in_area() and pg.mouse.get_pressed()[0]:
             self.group.set_active(self.button_id)
 
@@ -120,9 +145,7 @@ class RadioButton(Interactable):
         textbox = TextBox(UIPosition(textbox_pos_x, pos.y - text_size.y / 2),
                           longest_text_size,
                           self.group.font,
-                          self.label,
-                          self.group.label_color,
-                          self.group.label_alignment)
+                          self.label)
 
         textbox.render()
 

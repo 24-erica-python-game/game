@@ -1,12 +1,11 @@
 import re
 from enum import Enum
-from types import FunctionType
-from typing import Literal, Optional
+from typing import Optional
 
 import pygame as pg
 from pygame.font import FontType
 
-from game.ui.base import UIPosition, UISize, UIAlignment
+from game.ui.base import UIPosition, UISize
 from game.ui.color import RGB
 from game.ui.templates.textbox import TextBox
 
@@ -21,26 +20,30 @@ class InputPatternPreset(Enum):
 
 
 class TextInput(TextBox):
+    """
+    텍스트 입력 상자 템플릿.
+    """
     def __init__(self,
                  pos: UIPosition,
                  size: UISize,
                  font: FontType,
                  default_str: str,
-                 placeholder: Optional[str],
-                 pattern: Optional[str | InputPatternPreset],
-                 color: RGB,
-                 alignment: Literal[UIAlignment.left, UIAlignment.center, UIAlignment.right],
-                 return_type: type,
-                 condition: Optional[FunctionType | bool] = None,
-                 *condition_args):
-        super().__init__(pos, size, font, default_str, color, alignment)
+                 *,
+                 placeholder: Optional[str] = None,
+                 pattern: Optional[str | InputPatternPreset] = None):
+        """
+        :param pos:
+        :param size:
+        :param font:
+        :param default_str:
+        :param placeholder: (keyword-only)
+        :param pattern: (keyword-only)
+        """
+        super().__init__(pos, size, font, default_str)
         if isinstance(pattern, InputPatternPreset):
             self.pattern: str = pattern.value()
         else:
             self.pattern: str = pattern
-        self.return_type = return_type
-        self.condition = condition
-        self.condition_args = condition_args
         self.focused = False
         self.focused_time = 0
         self.blink_duration = 120
@@ -49,18 +52,23 @@ class TextInput(TextBox):
         self.placeholder_color = RGB(220, 220, 220)
 
     def set_text(self, text: str):
-        if hasattr(self.condition, '__call__'):
-            result = self.condition(self.condition_args)
-        else:
-            result = self.condition
+        """
+        텍스트박스의 내용을 설정함.
 
+        만약 ``pattern`` 필드가 ``None`` 이 아닐 경우 텍스트박스의 내용이 정규식에 대입해 참일 경우 해당 내용으로 변경함.
+        :param text:
+        :return:
+        """
         pattern = re.compile(self.pattern)
         if pattern.match(text):
-            if result:
-                self.label = text
+            self.label = text
 
-    def get_value(self):
-        return self.return_type(self.label)
+    def get_text(self) -> str:
+        """
+        텍스트박스의 내용을 반환함.
+        :return:
+        """
+        return self.label
 
     def render(self):
         display = pg.display.get_surface()
@@ -105,11 +113,7 @@ if __name__ == "__main__":
                           UISize(60, 20),
                           small_font,
                           "default_str",
-                          "placeholder",
-                          None,
-                          RGB(0, 0, 0),
-                          UIAlignment.left,
-                          object)
+                          placeholder="placeholder")
 
     while running:
         screen.fill(Color.WHITE)
