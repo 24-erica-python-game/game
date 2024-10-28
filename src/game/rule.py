@@ -3,8 +3,8 @@ from dataclasses import dataclass
 from types import FunctionType
 from typing import Optional, Self
 
-from game.tile.types import Position
-from game.unit.base import BaseUnit
+from src.game.tile.types import Position
+from src.game.unit.base import BaseUnit
 from src.game.command import commands
 from src.game.deck import Deck
 from src.game.player import Player
@@ -89,7 +89,7 @@ class GameSystem:
             if player.ticket <= 0:
                 self.players.remove(player)
 
-    def deploy_unit(self, unit: BaseUnit, pos: Position) -> None:
+    def deploy_unit(self, unit: 'BaseUnit', pos: Position) -> None:
         """
         유닛을 배치하는 메서드
 

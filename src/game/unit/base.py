@@ -6,7 +6,6 @@ from os import PathLike
 from queue import PriorityQueue
 from typing import Optional
 
-from src.game.tile.base import BaseTile
 from src.game.tile.types import Position
 
 
@@ -161,6 +160,9 @@ class BaseUnit(metaclass=ABCMeta):
 
         :param b: 목적지 타일의 좌표, 이동하지 못했을 경우 None
         """
+        from src.game.tile.base import BaseTile
+        # 순환참조가 발생하며 아래 두 함수만 이 클래스를 필요로 하기에 이곳으로 이동함.
+
         def g(t: BaseTile) -> float:
             # actual cost
             return float(t.movement_cost)

@@ -1,7 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from typing import Any
 
-from game.rule import GameSystem
 from src.game.tile.types import *
 from src.game.unit.base import BaseUnit
 
@@ -71,8 +70,10 @@ class BaseTile(metaclass=ABCMeta):
         현재 타일의 이웃 타일 리스트 반환
         :return: 유효한 이웃 타일 리스트
         """
-        map_data = GameSystem().map_data
+        # 이 import 문을 최상단으로 이동하면 순환참조 오류가 발생해 이곳으로 이동함.
+        from src.game.rule import GameSystem
 
+        map_data = GameSystem().map_data
         def is_valid_position(p: Position) -> bool:
             q_size, r_size = GameSystem().ruleset.map_size
             return 0 <= p.q < q_size and 0 <= p.r < r_size
@@ -84,7 +85,7 @@ class BaseTile(metaclass=ABCMeta):
                 map_data[self.position.q + v.value.q][self.position.r + v.value.r].position
             )
         ]
-    
+
 
 class BaseStructure(metaclass=ABCMeta):
     def __init__(self, faction: int, parent_tile: BaseTile) -> None:

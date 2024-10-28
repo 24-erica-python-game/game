@@ -1,7 +1,8 @@
 import pygame as pg
 
-from game.scene.home import HomeScene
-from game.scene.scene_handler import SceneHandler
+from src.game.rule import GameSystem, GameRule
+from src.game.scene.home import HomeScene
+from src.game.scene.scene_handler import SceneHandler
 from utils.config import Config
 
 pg.init()  # 게임 엔진 초기화
@@ -24,7 +25,8 @@ scene_handler.add_scene(HomeScene())
 while running:
     clock.tick(framerate)
 
-    for event in pg.event.get():  # pygame.event.get() 함수를 통해 게임 중간에 발생한 이벤트를 캐치하여 검사하기 위한 인덱스로 사용
+    # pygame.event.get() 함수를 통해 게임 중간에 발생한 이벤트를 캐치하여 검사하기 위한 인덱스로 사용
+    for event in pg.event.get():
         match event.type:
             case pg.QUIT:
                 running = False
