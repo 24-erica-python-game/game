@@ -38,6 +38,7 @@ class MountainTile(BaseTile):
     def on_unit_arrived(self) -> None:
         pass
 
+type tilemap = list[list[BaseTile]]
 
 class MapManager:
     _instance = None
@@ -45,7 +46,7 @@ class MapManager:
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super(MapManager, cls).__new__(cls)
-            cls.map_data: Optional[list[list[BaseTile]]] = None
+            cls._map_data: Optional[tilemap] = None
         return cls._instance
 
     @classmethod
@@ -53,17 +54,18 @@ class MapManager:
         return cls()
 
     @property
-    def map_data(self) -> Optional[list[list[BaseTile]]]:
-        return self.map_data
+    def map_data(self) -> Optional[tilemap]:
+        return self._map_data
 
     @map_data.setter
-    def map_data(self, map_data: Optional[list[list[BaseTile]]]) -> None:
-        self.map_data = map_data
+    def map_data(self, map_data: Optional[tilemap]) -> None:
+        # noinspection PyAttributeOutsideInit
+        self._map_data = map_data
 
     def __getitem__(self, key: int) -> Optional[list[BaseTile]]:
         return None if self.map_data is None else self.map_data[key]
 
-    def set_map(self, map_name: str) -> Optional[list[list[BaseTile]]]:
+    def set_map(self, map_name: str) -> Optional[tilemap]:
         try:
             with open(f"../assets/maps/{map_name}.json") as file_stream:
                 raw_map_data: dict = json.loads(file_stream.read())
@@ -76,7 +78,7 @@ class MapManager:
 
 
     @staticmethod
-    def __parse_map(raw_map_data: dict[str, Any]) -> list[list[BaseTile]]:
+    def __parse_map(raw_map_data: dict[str, Any]) -> tilemap:
         metadata = raw_map_data["metadata"]
         map_data = raw_map_data["map_data"]
 

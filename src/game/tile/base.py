@@ -6,38 +6,6 @@ from src.game.tile.types import *
 from src.game.unit.base import BaseUnit
 
 
-# BaseStructure는 BaseTile을 참조하고, BaseTile은 BaseStructure를 참조하고 있음.
-# BaseStructure를 2개 클래스에서 상속받고 있음.
-# 이를 나타내면 아래와 같이 나타낼 수 있음.
-#    ↙  HQ   ↖
-#   ↓          BaseStructure ↔ BaseTile
-#   ↓ Supply ↙                    ↓
-#   ↓   ↓                         ↓
-#          GameSystem
-
-# 문제점은 BaseStructure와 BaseTile이 서로를 참조하고 있다는 것이다.
-# 이벤트를 사용해서 GameSystem의 인스턴스가 이벤트를 수신받아, 해당 이벤트에 맞는 메서드를 GameSystem의 인스턴스가
-# 적절히 처리하는 방법으로도 해결할 수 있다고 생각한다.
-
-# 아래와 같은 구조로 수정하길 원함.
-#  ↙  HQ   ↖
-# ↓          BaseStructure ← BaseTile
-# ↓ Supply ↙                    ↓
-# ↓   ↓                         ↓
-
-
-# 또는
-
-# 아래와 같은 구조로 수정하길 원함.
-#  ↙  HQ   ↖
-# ↓          BaseStructure ← BaseTile
-# ↓ Supply ↙                    ↓
-##################이벤트######################
-# ↓   ↓                         ↓
-#          GameSystem (단 하나의 인스턴스만 존재하며 참조할 때 이 인스턴스를 참조해야 한다.)
-
-# 코드를 작성할 때 각 객체가 서로에게 의존하지 않도록 코드를 작성하면 좋겠음.
-
 class BaseTile(metaclass=ABCMeta):
     """
     https://www.redblobgames.com/grids/hexagons/ \n
@@ -47,11 +15,11 @@ class BaseTile(metaclass=ABCMeta):
 
     @property
     def placed_unit(self) -> Optional[BaseUnit]:
-        return self.placed_unit
+        return self._placed_unit
 
     @property
     def placed_structure(self) -> Optional['BaseStructure']:
-        return self.placed_structure
+        return self._placed_structure
 
     def __init__(self, q: int, r: int,
                  defence_bonus: int = 0,
@@ -59,14 +27,16 @@ class BaseTile(metaclass=ABCMeta):
         self.position = Position(q, r)
         self.defence_bonus = defence_bonus
         self.movement_cost = movement_cost
+        self._placed_unit = None
+        self._placed_structure = None
 
     @placed_unit.setter
     def placed_unit(self, unit: BaseUnit) -> None:
-        self.placed_unit = unit
+        self._placed_unit = unit
 
     @placed_structure.setter
     def placed_structure(self, structure: type['BaseStructure']) -> None:
-        self.placed_structure = structure
+        self._placed_structure = structure
 
     def on_unit_arrived(self) -> Any:
         """
@@ -77,8 +47,8 @@ class BaseTile(metaclass=ABCMeta):
 
         :return: 상속된 타일 클래스에서 구현한 메서드의 반환값
         """
-        if self.placed_structure is not None:
-            return self.placed_structure.on_unit_arrived(self)
+        if self._placed_structure is not None:
+            return self._placed_structure.on_unit_arrived(self)
 
     def place_unit(self, unit: BaseUnit) -> None:
         """
@@ -86,7 +56,7 @@ class BaseTile(metaclass=ABCMeta):
         :param unit:
         :return:
         """
-        self.placed_unit = unit
+        self._placed_unit = unit
 
     def place_structure(self, structure: type['BaseStructure']) -> None:
         """
@@ -94,7 +64,7 @@ class BaseTile(metaclass=ABCMeta):
         :param structure:
         :return:
         """
-        self.placed_structure = structure
+        self._placed_structure = structure
 
     def get_neighbors(self) -> list[Self]:
         """
