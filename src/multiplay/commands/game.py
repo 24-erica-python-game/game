@@ -1,4 +1,4 @@
-from game.rule import GameSystem
+from src.game.rule import GameSystem
 from src.game.command import register
 
 @register
@@ -17,6 +17,7 @@ def set_map(map_name: str):
 @register
 def set_rule(map_size: tuple[int, int], enable_fow: bool, start_ticket: int):
     from src.game.rule import GameRule
+
     GameSystem(GameRule(
         map_size=map_size,
         enable_fow=enable_fow,

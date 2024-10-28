@@ -5,6 +5,7 @@ from enum import Enum
 from typing import Optional, Any
 
 import pygame as pg
+from dacite import from_dict
 from pygame.font import FontType
 
 
@@ -36,7 +37,8 @@ class Font:
         :raises ValueError: 해당 폰트를 찾지 못했을 경우
         :return:
         """
-        for font in fonts:
+        _fonts = [from_dict(FontData, font) for font in fonts]
+        for font in _fonts:
             if font.name == name:
                 return pg.font.SysFont(font.font, font.size, False, False)
         raise ValueError(f"Font not found: {name}")

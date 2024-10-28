@@ -1,9 +1,6 @@
 from enum import IntEnum, Enum
 from typing import NamedTuple, Optional, Self
 
-# if TYPE_CHECKING:
-#     from game.tile.types import Position, CubeCoordinates, AxialCoordinates
-
 
 class AxialCoordinates:
     """

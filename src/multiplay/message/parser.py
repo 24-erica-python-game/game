@@ -40,7 +40,7 @@ class MessageParser:
         :param command_list: 명령 목록
         """
         for command in command_list:
-            self.game.call(command.lexeme, command.args)
+            self.game.call_command(command.lexeme, command.args)
 
     def run(self):
         """

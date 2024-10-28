@@ -1,5 +1,4 @@
 import json
-from typing import Optional
 
 from game.tile.structure import *
 from game.unit.unit import *

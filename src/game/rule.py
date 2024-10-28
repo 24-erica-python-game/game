@@ -1,3 +1,4 @@
+import sys
 from dataclasses import dataclass
 from types import FunctionType
 from typing import Optional, Self
@@ -44,17 +45,31 @@ class GameSystem:
     def switch_turn(self) -> int:
         """
         다음 플레이어로 턴을 넘기고, 현재 플레이어의 인덱스를 반환함.
+
         :return: 넘어간 플레이어의 인덱스
         """
         self.current_turn = (self.current_turn + 1) % len(self.players)
 
         return self.current_turn
 
-    def call(self, cmd_name: str, *args):
+    def call_command(self, cmd_name: str, *args):
+        """
+        src/multiplay/commands/commands.py의 command 딕셔너리 변수에 있는 함수를 호출한다.
+
+        먼저 함수를 인수와 함께 호출하며 만약 `TypeError` 가 발생할 경우 인수 없이 호출한다.
+
+        :param cmd_name: 명령 이름
+        :param args: 명령에 전달되는 인수
+        :return:
+        """
         try:
             self.callable_commands[cmd_name](*args)
         except TypeError:
             self.callable_commands[cmd_name]()
+        except Exception as e:
+            print(f"An error occured in function call_command:\n"
+                  f"cmd_name: {cmd_name}\n"
+                  f"{e}", file=sys.stderr)
 
     def check_win_condition(self) -> Optional[Player]:
         """
@@ -77,12 +92,11 @@ class GameSystem:
     def deploy_unit(self, unit: BaseUnit, pos: Position) -> None:
         """
         유닛을 배치하는 메서드
-        :param player:
+
         :param unit:
         :param pos:
         :return:
         """
-        # TODO: 어떤 플레이어의 유닛을 배치할 것인지에 대해 나와있지 않음
         self.map_data[pos.q][pos.r].place_unit(unit)
 
     def defeat_player(self, player: Player) -> None:
@@ -96,4 +110,3 @@ class GameSystem:
         player.ticket = 0
         if self.current_turn == self.players.index(player):
             self.switch_turn()
-
