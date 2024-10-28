@@ -35,7 +35,7 @@ class BaseTile(metaclass=ABCMeta):
         self._placed_unit = unit
 
     @placed_structure.setter
-    def placed_structure(self, structure: type['BaseStructure']) -> None:
+    def placed_structure(self, structure: 'BaseStructure') -> None:
         self._placed_structure = structure
 
     def on_unit_arrived(self) -> Any:
