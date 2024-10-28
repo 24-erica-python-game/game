@@ -1,10 +1,14 @@
+from dataclasses import dataclass
 from enum import IntEnum
 from typing import Optional
 
 from src.game.unit.base import BaseUnit
 
 
-type t_unit_data = list[BaseUnit, int]
+@dataclass
+class UnitData:
+    cls: BaseUnit
+    amount: int
 
 
 class SetMode(IntEnum):
@@ -15,27 +19,29 @@ class SetMode(IntEnum):
 
 class Deck[T]:
     def __init__(self):
-        self.deck: dict[T, t_unit_data] = dict()
+        self.deck: dict[T, UnitData] = dict()
 
     def get_amount(self, key: T) -> int:
         """
         유닛의 수량을 구함, 만약 유닛이 덱에 존재하지 않을 경우 0을 반환함
+
         :param key: 덱에서 찾을 유닛의 키
         :return: 찾은 유닛의 수량
         """
         try:
-            return self.deck[key][1]
+            return self.deck[key].amount
         except KeyError:
             return 0
 
     def get_unit(self, key: T) -> Optional[BaseUnit]:
         """
         유닛 클래스를 구함, 만약 덱에 존재하지 않을 경우 None을 반환함
+
         :param key: 덱에서 찾을 유닛 클래스
         :return: 찾은 유닛 클래스
         """
         try:
-            return self.deck[key][0]
+            return self.deck[key].cls
         except KeyError:
             return None
 
@@ -52,6 +58,7 @@ class Deck[T]:
         - SetMode.SUB일 경우 현재 수량에서 amount를 뺌
 
         수량을 계산한 후 현재 유닛 수량이 음수일 경우 0이 됨
+
         :param key: 접근할 키
         :param amount: 수량
         :param mode: 연산 모드
@@ -59,21 +66,27 @@ class Deck[T]:
         """
         match mode:
             case SetMode.ADD:
-                self.deck[key][1] += amount
+                self.deck[key].amount += amount
             case SetMode.SET:
-                self.deck[key][1] = amount
+                self.deck[key].amount = amount
             case SetMode.SUB:
-                self.deck[key][1] -= amount
+                self.deck[key].amount -= amount
 
-        if self.deck[key][1] < 0:
-            self.deck[key][1] = 0
+        if self.deck[key].amount < 0:
+            self.deck[key].amount = 0
 
-    def set_unit(self, key: T, unit: BaseUnit):
+    def set_unit(self, key: T, unit: BaseUnit, overwrite: bool = False):
         """
         유닛을 수량이 0인 상태로 덱에 추가함.
+
         :param key: 접근할 키
         :param unit: 유닛 클래스
+        :param overwrite: 만약 덱에 유닛이 있을 경우 무시하고 유닛의 수량을 0으로 만들지의 여부.
+        거짓일 경우 이 함수는 무시된다.
         :return:
         """
-        u: t_unit_data = [unit, 0]
+        if not overwrite:
+            if key in self.deck:
+                return
+        u = UnitData(unit, 0)
         self.deck[key] = u
