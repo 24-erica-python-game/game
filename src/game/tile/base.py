@@ -58,7 +58,7 @@ class BaseTile(metaclass=ABCMeta):
         """
         self._placed_unit = unit
 
-    def place_structure(self, structure: type['BaseStructure']) -> None:
+    def place_structure(self, structure: 'BaseStructure') -> None:
         """
         타일에 구조물을 배치함
         :param structure:
