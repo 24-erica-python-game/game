@@ -41,6 +41,7 @@ class Button(Interactable):
     def set_color(self, foreground: Optional[RGB] = None, background: Optional[RGB] = None):
         """
         버튼의 색상을 설정함.
+
         :param foreground: 글자의 색, None일 경우 변경하지 않음
         :param background: 글자의 배경색, None일 경우 변경하지 않음
         :return:
@@ -53,6 +54,7 @@ class Button(Interactable):
     def set_size(self, size: UISize):
         """
         버튼의 크기를 결정함.
+
         :param size: 변경할 크기, 만약 x 또는 y값이 -1일 경우 그 값은 변경하지 않음.
         :return:
         """
@@ -66,6 +68,7 @@ class Button(Interactable):
     def set_pos(self, pos: UIPosition):
         """
         버튼의 위치를 결정함.
+
         :param pos: 변경할 위치, 만약 x 또는 y값이 -1일 경우 그 값은 변경하지 않음.
         :return:
         """
@@ -79,6 +82,7 @@ class Button(Interactable):
     def set_label(self, label: str):
         """
         버튼의 레이블을 변경함.
+
         :param label: 변경할 문자열
         :return:
         """
@@ -87,6 +91,7 @@ class Button(Interactable):
     def set_font(self, font: FontType):
         """
         버튼의 폰트를 변경함.
+
         :param font:
         :return:
         """
@@ -103,10 +108,22 @@ class Button(Interactable):
 
     def on_click(self):
         """
-        버튼이 클릭되었을 때 호출되는 함수, 상속받은 버튼 클래스는 이 메서드를 오버라이딩해 버튼 클릭 시의 동작을 정의해야 함.
+        버튼이 클릭되었을 때 호출되는 함수,
+        상속받은 버튼 클래스는 이 메서드를 오버라이딩해 버튼 클릭 시의 동작을 정의해야 함.
+
         :return:
         """
         raise NotImplementedError
+
+    def is_clicked(self) -> bool:
+        """
+        버튼이 클릭되면 ``True``, 아니면 ``False`` 를 반환하는 함수
+
+        :return:
+        """
+        if pg.mouse.get_pressed()[0]:
+            return True
+        return False
 
 
 if __name__ == "__main__":
@@ -151,13 +168,16 @@ if __name__ == "__main__":
         screen.fill(Color.WHITE)
         clock.tick(30)
 
-        button.update()
-
         for event in pg.event.get():
             match event.type:
                 case pg.QUIT:
                     running = False
                 case pg.MOUSEBUTTONDOWN if button.is_mouse_in_area():
                     button.on_clicked()
+
+        button.update()
+
+        if button.is_clicked():
+            pg.draw.rect(screen, Color.GREEN, ((200, 100), (25, 25)))
 
         pg.display.flip()
