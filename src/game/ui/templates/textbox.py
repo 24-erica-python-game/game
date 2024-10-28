@@ -16,6 +16,7 @@ class TextBox(Interactable):
                  label: str):
         """
         텍스트박스 템플릿, 주어진 크기 안에서 텍스트를 정렬함.
+
         :param pos: 텍스트박스의 위치
         :param size: 텍스트박스의 크기
         :param font: 텍스트의 폰트
@@ -32,6 +33,7 @@ class TextBox(Interactable):
     def set_alignment(self, alignment: Literal[UIAlignment.left, UIAlignment.center, UIAlignment.right]):
         """
         텍스트 정렬 방향을 설정함.
+
         :param alignment: 텍스트 정렬 방향
         :return:
         """
@@ -40,12 +42,13 @@ class TextBox(Interactable):
     def set_text_color(self, color: RGB):
         """
         텍스트의 색상을 설정함.
+
         :param color: 텍스트의 색상
         :return:
         """
         self.color = color
 
-    def render(self):
+    def update(self):
         display = pg.display.get_surface()
         pos = self.pos
         text = self.font.render(self.label, True, self.color)
@@ -93,9 +96,9 @@ if __name__ == "__main__":
         screen.fill(Color.WHITE)
         clock.tick(30)
 
-        textbox_1.render()
-        textbox_2.render()
-        textbox_3.render()
+        textbox_1.update()
+        textbox_2.update()
+        textbox_3.update()
 
         for event in pg.event.get():
             match event.type:

@@ -22,7 +22,7 @@ class CheckBox(Interactable):
         self.active_indicator_type = active_indicator_type
         super().__init__(pos, size)
 
-    def render(self):
+    def update(self):
         display = pg.display.get_surface()
         gfx.rectangle(display, (self.pos, self.size), RGB(70, 70, 70))
 
@@ -47,7 +47,7 @@ class CheckBox(Interactable):
         :return: 체크박스의 최종 상태
         """
         self.state = not self.state
-        self.render()
+        self.update()
 
         return self.state
 
@@ -84,6 +84,6 @@ if __name__ == "__main__":
                 case pg.MOUSEBUTTONDOWN if checkbox.is_mouse_in_area():
                     checkbox.toggle_state()
 
-        checkbox.render()
+        checkbox.update()
 
         pg.display.flip()

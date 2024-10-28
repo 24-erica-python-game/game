@@ -50,13 +50,13 @@ class RadioButtonGroup:
         for button in self.buttons:
             button.check_button_clicked()
 
-    def render_buttons(self):
+    def update_buttons(self):
         """
-        라디오버튼 그룹의 버튼을 렌더링함.
+        라디오버튼 그룹의 버튼을 모두 업데이트함.
         :return:
         """
         for button in self.buttons:
-            button.render()
+            button.update()
 
     def set_active(self, active_id: t_button_id):
         """
@@ -119,7 +119,7 @@ class RadioButton(Interactable):
         if self.is_mouse_in_area() and pg.mouse.get_pressed()[0]:
             self.group.set_active(self.button_id)
 
-    def render(self):
+    def update(self):
         display = pg.display.get_surface()
         pos = self.pos
         gfx.aacircle(display,
@@ -127,9 +127,6 @@ class RadioButton(Interactable):
                      pos.y,
                      int(max(self.radius, 2)),
                      self.group.button_color)
-
-        # DEBUG: 클릭 영역 테스트용
-        # pg.draw.rect(display, RGB(255, 0, 0), (self.tst_pos, self.tst_size))
 
         label = self.group.font.render(self.label, True, self.group.label_color)
         longest_text_size = self.group.get_longest_text_size()
@@ -147,7 +144,7 @@ class RadioButton(Interactable):
                           self.group.font,
                           self.label)
 
-        textbox.render()
+        textbox.update()
 
         if self.group.active_id == self.button_id:
             gfx.aacircle(display,
@@ -199,7 +196,7 @@ if __name__ == "__main__":
         clock.tick(30)
 
         radio_group.check_buttons_clicked()
-        radio_group.render_buttons()
+        radio_group.update_buttons()
 
         for event in pg.event.get():
             match event.type:

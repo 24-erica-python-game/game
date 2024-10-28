@@ -92,7 +92,7 @@ class Button(Interactable):
         """
         self.font = font
 
-    def render(self):
+    def update(self):
         display = pg.display.get_surface()
         pg.draw.rect(display, self.background, (self.pos, self.size))
         text = self.font.render(self.label, True, self.foreground)
@@ -151,7 +151,7 @@ if __name__ == "__main__":
         screen.fill(Color.WHITE)
         clock.tick(30)
 
-        button.render()
+        button.update()
 
         for event in pg.event.get():
             match event.type:

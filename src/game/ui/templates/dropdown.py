@@ -52,7 +52,7 @@ class Dropdown[T](Interactable):
         else:
             return self.items[idx].__repr__()
 
-    def render(self):
+    def update(self):
         # TODO: 우측에 삼각형 아이콘을 배치해 만약 self.extended 가 true일 경우와 false일 경우를 알 수 있도록 만들기
         #       드롭다운 위치에 item_repr 사용해 현재 값 표시하기
         pass

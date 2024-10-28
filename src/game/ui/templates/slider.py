@@ -61,7 +61,7 @@ class SliderHead(Interactable):
         if secondary is not None:
             self.secondary_color = secondary
 
-    def render(self):
+    def update(self):
         display = pg.display.get_surface()
         match self.shape:
             case SliderHeadShape.CIRCLE:
@@ -237,7 +237,7 @@ class Slider[T: int | float]:
         for slider in Slider.__instances:
             slider.drag_ = False
 
-    def render(self):
+    def update(self):
         # FIXME: 슬라이더를 드래그하면서 다른 슬라이더의 헤드가 마우스 위에 있으면 그 슬라이더까지 값이 변경되는 문제
         if Slider.drag and self.head.is_mouse_in_area():
             self.drag_ = True
@@ -250,7 +250,7 @@ class Slider[T: int | float]:
         pg.draw.aaline(display, self.color, self.start_pos, self.end_pos)
 
         # head
-        self.head.render()
+        self.head.update()
 
 
 if __name__ == "__main__":
@@ -298,10 +298,10 @@ if __name__ == "__main__":
                 case pg.MOUSEBUTTONUP:
                     Slider.on_mousebutton_up()
 
-        slider.render()
+        slider.update()
         textbox.label = f"{slider.value:.1f}"
-        textbox.render()
+        textbox.update()
 
-        slider_2.render()
+        slider_2.update()
 
         pg.display.flip()
