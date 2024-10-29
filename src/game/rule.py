@@ -9,6 +9,7 @@ from src.game.command import commands
 from src.game.deck import Deck
 from src.game.player import Player
 from src.game.tile.base import BaseTile
+from utils.game_logger import GameLogger, PlayerData
 
 
 @dataclass
@@ -36,11 +37,17 @@ class GameSystem:
                 raise ValueError("ruleset must be provided when init.")
 
             self.ruleset = ruleset
-            self.players = [Player(f"P{i + 1}", ruleset.start_ticket, Deck()) for i in range(2)]
+            self.players: list[Optional[Player]] = [Player(f"P{i + 1}", ruleset.start_ticket, Deck()) for i in range(2)]
             self.current_turn = 0
             self.callable_commands: dict[str, FunctionType] = commands
             self.map_data: Optional[list[list[BaseTile]]] = None
             self._initialized = True
+            self.logger = None
+
+    # def init_game_logger(self):
+    #     player_data = [PlayerData(name=player.nickname, number=p_idx)
+    #                    for p_idx, player in enumerate(self.players)]
+    #     self.logger = GameLogger(player_data)
 
     def switch_turn(self) -> int:
         """
@@ -49,6 +56,9 @@ class GameSystem:
         :return: 넘어간 플레이어의 인덱스
         """
         self.current_turn = (self.current_turn + 1) % len(self.players)
+
+        if self.players[self.current_turn] is None:
+            self.switch_turn()
 
         return self.current_turn
 
@@ -77,17 +87,34 @@ class GameSystem:
 
         :return: 남은 플레이어가 1명이라면 그 플레이어를 반환하고, 아닐 경우 `None` 반환
         """
-        return None if len(self.players) == 1 else self.players[0]
+        num_players = 0
+        idx = 0
 
-    def check_all_players_tickets(self) -> None:
+        for p_idx, player in enumerate(self.players):
+            if player is not None:
+                num_players += 1
+                idx = p_idx
+
+        if num_players == 1:
+            return self.players[idx]
+        else:
+            return None
+
+    def check_all_players_tickets(self) -> list[tuple[int, Player]]:
         """
         모든 플레이어의 티켓을 검사하고, 티켓이 0 이하인 플레이어를 제거함.
-        """
-        players = self.players.copy()
 
-        for player in players:
-            if player.ticket <= 0:
-                self.players.remove(player)
+        :return: 제거된 플레이어 목록, (플레이어 번호, 플레이어 인스턴스) 형태로 넘겨짐.
+        """
+        removed_players = []
+
+        for p_num, player in enumerate(self.players):
+            if player is not None:
+                if player.ticket <= 0:
+                    removed_players.append((p_num, player))
+                    self.players[p_num] = None
+
+        return removed_players
 
     def deploy_unit(self, unit: 'BaseUnit', pos: Position) -> None:
         """
@@ -103,10 +130,14 @@ class GameSystem:
         """
         패배 메서드
 
-        티켓을 모두 제거하고 턴을 넘김
+        턴을 넘긴 후 플레이어 목록에서 해당 플레이어를 ``None`` 으로 바꿈.
+
         :param player:
         :return:
         """
-        player.ticket = 0
+        # player.ticket = 0
+        p_idx = self.players.index(player)
+
         if self.current_turn == self.players.index(player):
             self.switch_turn()
+            self.players[p_idx].ticket = None
