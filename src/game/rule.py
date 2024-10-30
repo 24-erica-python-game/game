@@ -63,9 +63,9 @@ class GameSystem:
         if self.players[self.current_turn] is None:
             self.switch_turn()
 
-        self.logger.set_block(0)
+        self.logger.set_indent(0)
         self.logger.write(f"player {self.current_turn} ({self.players[self.current_turn].nickname})'s turn:")
-        self.logger.set_block(1)
+        self.logger.set_indent(4)
 
         return self.current_turn
 

@@ -26,7 +26,7 @@ class GameLogger:
         """
         self.stream: Optional[TextIO] = None
         self.players = player_data
-        self.block = 0
+        self.indent = 0
 
     def new(self, filename: str):
         """
@@ -51,19 +51,17 @@ class GameLogger:
         """
         if self.stream is not None:
             new_content = self.stream.readlines()
-            new_content.append(" " * 4 * self.block + content)
+            new_content.append(" " * self.indent + content)
             self.stream.writelines(new_content)
 
     def set_indent(self, level: int):
         """
         로그의 들여쓰기 수준을 설정함.
 
-        (들여쓰기 레벨 1당 공백 4개)
-
-        :param level: 들여쓰기 수준
+        :param level: 들여쓰기 수준, 숫자 1당 공백 1개
         :return:
         """
-        self.block = level
+        self.indent = level
 
     def close(self):
         """
