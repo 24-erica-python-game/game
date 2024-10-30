@@ -3,12 +3,12 @@ from dataclasses import dataclass
 from types import FunctionType
 from typing import Optional, Self
 
-from src.game.tile.types import Position
-from src.game.unit.base import BaseUnit
 from src.game.command import commands
 from src.game.deck import Deck
 from src.game.player import Player
 from src.game.tile.base import BaseTile
+from src.game.tile.types import Position
+from src.game.unit.base import BaseUnit
 from utils.game_logger import GameLogger, PlayerData
 
 
@@ -42,12 +42,15 @@ class GameSystem:
             self.callable_commands: dict[str, FunctionType] = commands
             self.map_data: Optional[list[list[BaseTile]]] = None
             self._initialized = True
-            self.logger = None
+            self.logger: Optional[GameLogger] = None
 
-    # def init_game_logger(self):
-    #     player_data = [PlayerData(name=player.nickname, number=p_idx)
-    #                    for p_idx, player in enumerate(self.players)]
-    #     self.logger = GameLogger(player_data)
+    def init_game_logger(self):
+        player_data = [PlayerData(name=player.nickname, number=p_idx)
+                       for p_idx, player in enumerate(self.players)]
+        self.logger = GameLogger(player_data)
+
+        for i, p in enumerate(player_data):
+            self.logger.write(f"player {i}: {p.name}")
 
     def switch_turn(self) -> int:
         """
@@ -59,6 +62,10 @@ class GameSystem:
 
         if self.players[self.current_turn] is None:
             self.switch_turn()
+
+        self.logger.set_block(0)
+        self.logger.write(f"player {self.current_turn} ({self.players[self.current_turn].nickname})'s turn:")
+        self.logger.set_block(1)
 
         return self.current_turn
 
@@ -96,6 +103,7 @@ class GameSystem:
                 idx = p_idx
 
         if num_players == 1:
+            self.logger.write(f"winner: player {idx} ({self.players[idx].nickname})")
             return self.players[idx]
         else:
             return None
@@ -126,6 +134,11 @@ class GameSystem:
         """
         self.map_data[pos.q][pos.r].place_unit(unit)
 
+        self.logger.write(f"unit deployed:\n"
+                          f"    name: {unit.__name__}\n"
+                          f"    faction: {unit.faction}\n"
+                          f"    position: ({pos.q}, {pos.r})")
+
     def defeat_player(self, player: Player) -> None:
         """
         패배 메서드
@@ -141,3 +154,5 @@ class GameSystem:
         if self.current_turn == self.players.index(player):
             self.switch_turn()
             self.players[p_idx].ticket = None
+
+        self.logger.write(f"player {p_idx} ({self.players[p_idx].nickname}) defeated")

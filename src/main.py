@@ -31,5 +31,7 @@ while running:
             case pg.QUIT:
                 running = False
 
+    screen.fill((255, 255, 255))
+
     scene_handler.draw_scene()
     pg.display.flip() # pygame의 메인 루프 끝에 반드시 사용
