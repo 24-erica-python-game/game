@@ -158,10 +158,10 @@ class BaseUnit(metaclass=ABCMeta):
         """
         A 타일에서 B 타일로 이동
 
-        :param b: 목적지 타일의 좌표, 이동하지 못했을 경우 None
+        :param destination: 목적지 타일의 좌표, 이동하지 못했을 경우 None
         """
         from src.game.tile.base import BaseTile
-        # 순환참조가 발생하며 아래 두 함수만 이 클래스를 필요로 하기에 이곳으로 이동함.
+        from src.game.rule import GameSystem
 
         def g(t: BaseTile) -> float:
             # actual cost
@@ -192,13 +192,13 @@ class BaseUnit(metaclass=ABCMeta):
 
                 return current_position
 
-            for neighbor in self.get_neighbors():
+            neighbors = GameSystem().map_data[self.position.q][self.position.r].get_neighbors()
+            for neighbor in neighbors:
                 if neighbor.position not in visited:
                     total_cost = current_cost + g(neighbor) + h(neighbor)
                     queue.put((total_cost, neighbor.position, path + [neighbor.position]))
 
         return None
-
 
 
 class BaseSupplyUnit(BaseUnit):

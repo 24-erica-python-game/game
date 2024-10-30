@@ -75,7 +75,6 @@ class MapManager:
 
         return self.map_data
 
-
     @staticmethod
     def __parse_map(raw_map_data: dict[str, Any]) -> tilemap:
         metadata = raw_map_data["metadata"]
@@ -110,10 +109,10 @@ class MapManager:
                 match (tile_mod["structure"]):
                     case "supply_base":
                         tile.place_structure(
-                            SupplyBaseStructure(tile_mod["structure"]["faction"]))
+                            SupplyBaseStructure(tile_mod["structure"]["faction"], tile))
                     case "HQ":
                         tile.place_structure(
-                            HQStructure(tile_mod["structure"]["faction"]))
+                            HQStructure(tile_mod["structure"]["faction"], tile))
             except KeyError:
                 pass
 

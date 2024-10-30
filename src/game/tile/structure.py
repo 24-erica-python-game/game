@@ -10,7 +10,8 @@ class HQStructure(BaseStructure):
         super().on_unit_arrived()
 
         if self.parent_tile.placed_unit.faction != self.faction:
-            GameSystem().players[self.faction].surrender()
+            game_sys = GameSystem()
+            game_sys.defeat_player(game_sys.players[self.faction])
 
 class SupplyBaseStructure(BaseStructure):
     def __init__(self, faction: int, parent_tile: 'BaseTile') -> None:
@@ -19,5 +20,7 @@ class SupplyBaseStructure(BaseStructure):
     def on_unit_arrived(self) -> None:
         super().on_unit_arrived()
 
-        if self.parent_tile.placed_unit.faction == self.faction:
-            self.parent_tile.placed_unit.supply_reserve = (self.parent_tile.placed_unit.supply_reserve + 100) % 100
+        placed_unit = self.parent_tile.placed_unit
+
+        if placed_unit.faction == self.faction:
+            self.parent_tile.placed_unit.supply_reserve = (placed_unit.supply_reserve + 100) % 100
