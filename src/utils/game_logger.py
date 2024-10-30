@@ -54,13 +54,13 @@ class GameLogger:
             new_content.append(" " * 4 * self.block + content)
             self.stream.writelines(new_content)
 
-    def set_block(self, level: int):
+    def set_indent(self, level: int):
         """
-        블록을 설정함.
+        로그의 들여쓰기 수준을 설정함.
 
-        (블록 1개당 공백 4개)
+        (들여쓰기 레벨 1당 공백 4개)
 
-        :param level:
+        :param level: 들여쓰기 수준
         :return:
         """
         self.block = level
