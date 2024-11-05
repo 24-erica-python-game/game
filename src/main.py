@@ -1,8 +1,7 @@
 import pygame as pg
 
-from src.game.rule import GameSystem, GameRule
+from game.scene.game.in_game import GameScene
 from src.game.scene.home import HomeScene
-from src.game.scene.scene_handler import SceneHandler
 from utils.config import Config
 
 pg.init()  # 게임 엔진 초기화
@@ -17,10 +16,11 @@ size = Config.get_config(f"display.window_size.available.{current_size}")
 framerate = display_config["framerate"]
 vsync = display_config["vsync"]
 screen = pg.display.set_mode(size, vsync=vsync)
+
 pg.display.set_caption("Buggy Buddies")  # 창 상단 캡션 설정
 
-scene_handler = SceneHandler()
-scene_handler.add_scene(HomeScene())
+home_scene = HomeScene()
+game_scene = GameScene("test_map_1")
 
 while running:
     clock.tick(framerate)
@@ -33,5 +33,6 @@ while running:
 
     screen.fill((255, 255, 255))
 
-    scene_handler.draw_scene()
+    game_scene.draw()
+
     pg.display.flip() # pygame의 메인 루프 끝에 반드시 사용

@@ -6,7 +6,7 @@
     "map_data": [
         {
             "position": [0, 0],
-            "tile": "hill",
+            "tile": "pond",
             "structure": {
                 "type": null,
                 "faction": 0
@@ -16,6 +16,14 @@
                 "faction": 0,
                 "hp": 0
             }
+        },
+        {
+            "position": [0, 1],
+            "tile": "pond"
+        },
+        {
+            "position": [1, 0],
+            "tile": "pond"
         }
     ]
 }

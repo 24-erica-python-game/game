@@ -11,6 +11,9 @@ class BaseTile(metaclass=ABCMeta):
     기본: `Axial Coordinates` 사용 \n
     필요 시 `Cube Coordinates` 사용
     """
+    @property
+    def type_name(self) -> str:
+        return self._type_name
 
     @property
     def placed_unit(self) -> Optional[BaseUnit]:
@@ -20,14 +23,9 @@ class BaseTile(metaclass=ABCMeta):
     def placed_structure(self) -> Optional['BaseStructure']:
         return self._placed_structure
 
-    def __init__(self, q: int, r: int,
-                 defence_bonus: int = 0,
-                 movement_cost: int = 1) -> None:
-        self.position = Position(q, r)
-        self.defence_bonus = defence_bonus
-        self.movement_cost = movement_cost
-        self._placed_unit = None
-        self._placed_structure = None
+    @type_name.setter
+    def type_name(self, type_name: str):
+        self._type_name = type_name
 
     @placed_unit.setter
     def placed_unit(self, unit: BaseUnit) -> None:
@@ -36,6 +34,20 @@ class BaseTile(metaclass=ABCMeta):
     @placed_structure.setter
     def placed_structure(self, structure: 'BaseStructure') -> None:
         self._placed_structure = structure
+
+    def __init__(self, q: int, r: int,
+                 type_name: str,
+                 defence_bonus: int = 0,
+                 movement_cost: int = 1) -> None:
+        self.position = Position(q, r)
+        self.defence_bonus = defence_bonus
+        self.movement_cost = movement_cost
+        self._placed_unit = None
+        self._placed_structure = None
+        self._type_name = type_name
+
+    def __repr__(self) -> str:
+        return f"Tile({self.position.q}, {self.position.r})"
 
     def on_unit_arrived(self) -> Any:
         """

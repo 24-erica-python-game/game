@@ -5,39 +5,34 @@ from game.unit.unit import *
 from src.game.tile.base import *
 
 
+type tilemap = list[list[BaseTile]]
+
+
 class HillTile(BaseTile):
     def __init__(self, q: int, r: int) -> None:
-        super().__init__(q, r, movement_cost=2, defence_bonus=1)
-
-    def __repr__(self) -> str:
-        return f"Tile({self.position.q}, {self.position.r})"
+        super().__init__(q, r, "hill", movement_cost=2, defence_bonus=1)
 
     def on_unit_arrived(self) -> None:
         pass
-
 
 class FieldTile(BaseTile):
     def __init__(self, q: int, r: int) -> None:
-        super().__init__(q, r, movement_cost=1, defence_bonus=0)
-
-    def __repr__(self) -> str:
-        return f"Tile({self.position.q}, {self.position.r})"
+        super().__init__(q, r, "field", movement_cost=1, defence_bonus=0)
 
     def on_unit_arrived(self) -> None:
         pass
-
 
 class MountainTile(BaseTile):
     def __init__(self, q: int, r: int) -> None:
-        super().__init__(q, r, movement_cost=4, defence_bonus=3)
-
-    def __repr__(self) -> str:
-        return f"Tile({self.position.q}, {self.position.r})"
+        super().__init__(q, r, "mountain", movement_cost=4, defence_bonus=3)
 
     def on_unit_arrived(self) -> None:
         pass
 
-type tilemap = list[list[BaseTile]]
+class PondTile(BaseTile):
+    def __init__(self, q: int, r: int) -> None:
+        super().__init__(q, r, "pond", movement_cost=9999)
+
 
 class MapManager:
     _instance = None
@@ -66,7 +61,8 @@ class MapManager:
 
     def set_map(self, map_name: str) -> Optional[tilemap]:
         try:
-            with open(f"../assets/maps/{map_name}.json") as file_stream:
+            print(os.path.abspath(f"assets/maps/{map_name}.json"))
+            with open(f"assets/maps/{map_name}.json") as file_stream:
                 raw_map_data: dict = json.loads(file_stream.read())
                 self.map_data = self.__parse_map(raw_map_data)
 
@@ -101,6 +97,9 @@ class MapManager:
                         tile = parsed_map[y][x]
                     case "mountain":
                         parsed_map[y][x] = MountainTile(x, y)
+                        tile = parsed_map[y][x]
+                    case "pond":
+                        parsed_map[y][x] = PondTile(x, y)
                         tile = parsed_map[y][x]
             except KeyError:
                 pass
