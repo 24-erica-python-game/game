@@ -1,14 +1,13 @@
 import math
 import os
-import random
 
 import pygame as pg
+from perlin_noise import PerlinNoise
 from pygame import SurfaceType
 
 from game.scene.base import Scene
 from game.tile.base import BaseTile
 from game.tile.tile import MapManager
-
 
 type t_position = list[float]
 
@@ -30,6 +29,7 @@ class GameScene(Scene):
         self.cam_pos: t_position = [0.0, 0.0]
         self.draw_distance = 2160
         self.sprites: dict[str, tuple[img_data, img_size]] = dict()
+        self.noise = PerlinNoise(octaves=3)
 
         sprite_root_dir = "assets\\sprites\\maps"
         # TODO: threading 모듈로 로딩 속도 개선
@@ -56,9 +56,6 @@ class GameScene(Scene):
         pass
 
     def get_tile_sprite(self, tile: BaseTile, under: bool = False) -> SurfaceType:
-        sprite_name = ""
-        rand_range: tuple[int, int] = (0, 0)
-
         match tile.type_name:
             case "field":
                 sprite_name = "field"
@@ -76,7 +73,7 @@ class GameScene(Scene):
                 sprite_name = "field"
                 num_variation = 1
 
-        rand_result = (id(tile) % num_variation) + 1
+        rand_result = int((abs(self.noise.noise([tile.position.q / 100, tile.position.r / 100])) * 125) % num_variation + 1)
         sprite_name = f"{sprite_name}_{rand_result}"
 
         if under:
@@ -87,8 +84,6 @@ class GameScene(Scene):
         return result_data[0]
 
     def draw(self):
-        # FIXME: 타일이 다른 바리에이션끼리 퍼져서 분포해야 하지만 뭉쳐서 존재하는 문제
-
         screen = pg.display.get_surface()
         screen.fill((0, 0, 0))
         def x(x: int, y: int): return 16 + 36 * x + (y % 2 * (36 / 2))

@@ -4,3 +4,4 @@ geks
 dacite
 pytest
 numpy
+perlin-noise
