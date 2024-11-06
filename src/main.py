@@ -33,6 +33,6 @@ while running:
 
     screen.fill((255, 255, 255))
 
-    game_scene.draw()
+    game_scene.run()
 
     pg.display.flip() # pygame의 메인 루프 끝에 반드시 사용
